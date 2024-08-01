@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from base.models import Video
+from video.models import Video
 from .serializers import VideoSerializer
 from rest_framework import status
 
