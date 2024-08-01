@@ -1,12 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from video.models import Video
+from video.models import Content
 from .serializers import VideoSerializer
 from rest_framework import status
 
 @api_view(['GET'])
 def getVideos(request):
-    videos = Video.objects.all()
+    videos = Content.objects.all()
     serializer = VideoSerializer(videos, many=True)
     return Response(serializer.data)
 
