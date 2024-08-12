@@ -3,18 +3,26 @@ import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Pressable, Text, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from  'expo-linear-gradient';
 import LikeButton from './LikeButton';
+import CommentModal from './CommentModal';
+import { GestureDetector } from 'react-native-gesture-handler';
 
 export default function VideoScreen(props) {
+
+  //video source for the post
   const videoSource = props.post.videoSource;
   const ref = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [commentsVisable, setCommentsVisable] = useState(false);
+
+  const [comments, setComments] = useState([]);
+
 
   const {height} = useWindowDimensions();
 
+  //video player required for expo video
   const player = useVideoPlayer(videoSource, player => {
     player.loop = true;
     player.play(); 
@@ -32,6 +40,7 @@ export default function VideoScreen(props) {
 
     }
 
+    //used to autoplay current video
   useEffect(() => {
     if(props.activePostId !== props.post.id) {
       player.pause();
@@ -42,6 +51,8 @@ export default function VideoScreen(props) {
       setIsPlaying(true);
     }
   }, [props.activePostId]);
+
+
   useEffect(() => {
     const subscription = player.addListener('playingChange', isPlaying => {
       setIsPlaying(isPlaying);
@@ -52,9 +63,13 @@ export default function VideoScreen(props) {
     };
   }, [player]);
 
-  useEffect(() => {
-    // console.log('status: ', player.status);
-  }, [status]);
+  const startComments = () => {
+    setCommentsVisable(true);
+  }
+
+  const endComments = () => {
+    setCommentsVisable(false);
+  }
 
   return (
     <View style={[styles.container, {height: height-50}]}>
@@ -95,13 +110,19 @@ export default function VideoScreen(props) {
                   {/* <AntDesign name="heart" size={24} color="white" />
                   <Text style = {styles.iconFont}>{props.post.likes}</Text> */}
                  <LikeButton likes={props.post.likes}/>
-
-                <FontAwesome name="comment" size={24} color="white" />
+                 <Pressable onPress = {startComments}>
+                 <MaterialCommunityIcons name="comment-outline" size={24} color="white" />
+                 </Pressable>
               </View >
             </View> 
 
 
-            
+            <CommentModal 
+              visible = {commentsVisable}
+              onClose = {endComments}
+              comments = {comments}
+              onAddComment = {(comment) => setComments([...comments, comment])}
+              />
             </SafeAreaView> 
         </Pressable>
       </View>
@@ -127,6 +148,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     padding: 10,
+    paddingRight: 0,
+    paddingBottom: 30,
     flexDirection: 'row', 
     alignItems: 'flex-end', 
 
