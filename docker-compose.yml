@@ -22,16 +22,14 @@ services:
     env_file:
       - .env
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #   command: yarn start
-  #   volumes:
-  #     - ./frontend:/app
-  #   ports:
-  #     - "8081:8081"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: ./frontend
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    volumes:
+      - ./frontend:/app
 
 volumes:
   postgres_data:
