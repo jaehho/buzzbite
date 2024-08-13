@@ -26,7 +26,6 @@ if(!appReady) {
 }
   return (
     <Stack>
-      <Stack.Screen name="home"/>
     </Stack>
   );
 }

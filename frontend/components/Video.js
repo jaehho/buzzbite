@@ -40,14 +40,10 @@ export default function VideoScreen(props) {
       setIsPlaying(true);
       setShowPause(false);
       }
-
-    if(player.status == 'readyToPlay' || player.status == 'idle' || player.status == 'error' || player.status == 'loading') {
-      console.log('ready to play');
-    } else {
-      console.log('not ready to play');
-    }
     }
 
+
+  
     //used to autoplay current video
   useEffect(() => {
     if(props.activePostId !== props.post.id) {
@@ -84,7 +80,6 @@ export default function VideoScreen(props) {
 
   return (
     <View style={[styles.container, {height: height-60}]}>
-      
         <VideoView
                 ref={ref}
                 style={styles.videoStyle}
@@ -94,7 +89,6 @@ export default function VideoScreen(props) {
                 nativeControls = {false}
                 contentFit = 'contain'
             />
-
         <Pressable onPress={playPause} 
           style = {styles.content}>
           <LinearGradient
@@ -124,7 +118,6 @@ export default function VideoScreen(props) {
                  </Pressable>
               </View >
             </View> 
-
             <CommentModal 
               visible = {commentsVisable}
               onClose = {endComments}

@@ -2,5 +2,12 @@ import { Redirect } from "expo-router";
 import HomeScreen from "./home";
 
 export default function RootLayout() {
-  return (<HomeScreen/>);
+
+  const loggedIn = false;
+  if(!loggedIn) {
+    return <Redirect href="/login" />;
+  }
+  return (
+  <HomeScreen/>
+  )
 };
