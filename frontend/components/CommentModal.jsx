@@ -47,11 +47,12 @@ const CommentModal = ({ visible, onClose, comments, onAddComment }) => {
           {comments.length === 0 && <Text style={styles.noCommentsText}>No comments yet</Text>}
           <FlatList
             data={comments}
-            keyExtractor={(item) => item.id}
+            initialNumToRender={10}
+            keyExtractor={(item) => item}
             renderItem={({ item }) => (
               <View style={styles.commentContainer}>
                 <Text style={styles.username}>{item.username}</Text>
-                <Text>{item.text}</Text>
+                <Text>{item}</Text>
               </View>
             )}
           />

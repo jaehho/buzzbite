@@ -15,6 +15,7 @@ export default function VideoScreen(props) {
   const videoSource = props.post.videoSource;
   const ref = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showPause, setShowPause] = useState(false);
   const [commentsVisable, setCommentsVisable] = useState(false);
 
   const [comments, setComments] = useState([]);
@@ -33,11 +34,18 @@ export default function VideoScreen(props) {
     if (isPlaying) {
       player.pause();
       setIsPlaying(false);
+      setShowPause(true);
       } else {
       player.play();
       setIsPlaying(true);
+      setShowPause(false);
       }
 
+    if(player.status == 'readyToPlay' || player.status == 'idle' || player.status == 'error' || player.status == 'loading') {
+      console.log('ready to play');
+    } else {
+      console.log('not ready to play');
+    }
     }
 
     //used to autoplay current video
@@ -45,10 +53,13 @@ export default function VideoScreen(props) {
     if(props.activePostId !== props.post.id) {
       player.pause();
       setIsPlaying(false);
+      setShowPause(false);
+      
     }
     if(props.activePostId === props.post.id) {
       player.play();
       setIsPlaying(true);
+      setShowPause(false);
     }
   }, [props.activePostId]);
 
@@ -72,7 +83,7 @@ export default function VideoScreen(props) {
   }
 
   return (
-    <View style={[styles.container, {height: height-50}]}>
+    <View style={[styles.container, {height: height-60}]}>
       
         <VideoView
                 ref={ref}
@@ -96,7 +107,7 @@ export default function VideoScreen(props) {
               height: '100%',
             }}
           />
-          {!isPlaying && <Ionicons name="play" size={40} color="rgba(255, 255, 255, 0.6)" style = {{position: 'absolute', alignSelf: 'center', top: '50%'}}/>}
+          {showPause && <Ionicons name="play" size={40} color="rgba(255, 255, 255, 0.6)" style = {{position: 'absolute', alignSelf: 'center', top: '50%'}}/>}
           <SafeAreaView style = {{flex: 1, padding: 10}}>
             <View style = {styles.footer}>
 
@@ -107,15 +118,12 @@ export default function VideoScreen(props) {
 
 
               <View style = {styles.rightColumn}>
-                  {/* <AntDesign name="heart" size={24} color="white" />
-                  <Text style = {styles.iconFont}>{props.post.likes}</Text> */}
                  <LikeButton likes={props.post.likes}/>
                  <Pressable onPress = {startComments}>
                  <MaterialCommunityIcons name="comment-outline" size={24} color="white" />
                  </Pressable>
               </View >
             </View> 
-
 
             <CommentModal 
               visible = {commentsVisable}
@@ -149,7 +157,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 10,
     paddingRight: 0,
-    paddingBottom: 30,
+    paddingBottom: 20,
     flexDirection: 'row', 
     alignItems: 'flex-end', 
 
