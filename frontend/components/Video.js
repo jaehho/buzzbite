@@ -3,18 +3,27 @@ import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Pressable, Text, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from  'expo-linear-gradient';
 import LikeButton from './LikeButton';
+import CommentModal from './CommentModal';
+import { GestureDetector } from 'react-native-gesture-handler';
 
 export default function VideoScreen(props) {
+
+  //video source for the post
   const videoSource = props.post.videoSource;
   const ref = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showPause, setShowPause] = useState(false);
+  const [commentsVisable, setCommentsVisable] = useState(false);
+
+  const [comments, setComments] = useState([]);
+
 
   const {height} = useWindowDimensions();
 
+  //video player required for expo video
   const player = useVideoPlayer(videoSource, player => {
     player.loop = true;
     player.play(); 
@@ -25,23 +34,36 @@ export default function VideoScreen(props) {
     if (isPlaying) {
       player.pause();
       setIsPlaying(false);
+      setShowPause(true);
       } else {
       player.play();
       setIsPlaying(true);
+      setShowPause(false);
       }
 
+    if(player.status == 'readyToPlay' || player.status == 'idle' || player.status == 'error' || player.status == 'loading') {
+      console.log('ready to play');
+    } else {
+      console.log('not ready to play');
+    }
     }
 
+    //used to autoplay current video
   useEffect(() => {
     if(props.activePostId !== props.post.id) {
       player.pause();
       setIsPlaying(false);
+      setShowPause(false);
+      
     }
     if(props.activePostId === props.post.id) {
       player.play();
       setIsPlaying(true);
+      setShowPause(false);
     }
   }, [props.activePostId]);
+
+
   useEffect(() => {
     const subscription = player.addListener('playingChange', isPlaying => {
       setIsPlaying(isPlaying);
@@ -52,12 +74,16 @@ export default function VideoScreen(props) {
     };
   }, [player]);
 
-  useEffect(() => {
-    // console.log('status: ', player.status);
-  }, [status]);
+  const startComments = () => {
+    setCommentsVisable(true);
+  }
+
+  const endComments = () => {
+    setCommentsVisable(false);
+  }
 
   return (
-    <View style={[styles.container, {height: height-50}]}>
+    <View style={[styles.container, {height: height-60}]}>
       
         <VideoView
                 ref={ref}
@@ -81,7 +107,7 @@ export default function VideoScreen(props) {
               height: '100%',
             }}
           />
-          {!isPlaying && <Ionicons name="play" size={40} color="rgba(255, 255, 255, 0.6)" style = {{position: 'absolute', alignSelf: 'center', top: '50%'}}/>}
+          {showPause && <Ionicons name="play" size={40} color="rgba(255, 255, 255, 0.6)" style = {{position: 'absolute', alignSelf: 'center', top: '50%'}}/>}
           <SafeAreaView style = {{flex: 1, padding: 10}}>
             <View style = {styles.footer}>
 
@@ -92,16 +118,19 @@ export default function VideoScreen(props) {
 
 
               <View style = {styles.rightColumn}>
-                  {/* <AntDesign name="heart" size={24} color="white" />
-                  <Text style = {styles.iconFont}>{props.post.likes}</Text> */}
                  <LikeButton likes={props.post.likes}/>
-
-                <FontAwesome name="comment" size={24} color="white" />
+                 <Pressable onPress = {startComments}>
+                 <MaterialCommunityIcons name="comment-outline" size={24} color="white" />
+                 </Pressable>
               </View >
             </View> 
 
-
-            
+            <CommentModal 
+              visible = {commentsVisable}
+              onClose = {endComments}
+              comments = {comments}
+              onAddComment = {(comment) => setComments([...comments, comment])}
+              />
             </SafeAreaView> 
         </Pressable>
       </View>
@@ -127,6 +156,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     padding: 10,
+    paddingRight: 0,
+    paddingBottom: 20,
     flexDirection: 'row', 
     alignItems: 'flex-end', 
 

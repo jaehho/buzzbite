@@ -16,6 +16,7 @@ import {RadialGradient} from "react-native-gradients";
 const LikeButton = (props) => {
   const liked = useSharedValue(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const outlineStyle = useAnimatedStyle(() => {
     return {
@@ -39,8 +40,10 @@ const LikeButton = (props) => {
   });
 
   const onLikedPress = () => {
+    setIsDisabled(true);
     liked.value = withSpring(liked.value ? 0 : 1);
     setIsLiked(!isLiked);
+    setTimeout(() => { setIsDisabled(false); }, 500);
   };
 
   return (
@@ -51,7 +54,7 @@ const LikeButton = (props) => {
       justifyContent: "center",
       flexDirection: "column",
     }}>
-        <Pressable onPress={onLikedPress}>
+        <Pressable onPress={onLikedPress} disabled = {isDisabled}>
           <Animated.View style={[StyleSheet.absoluteFillObject, outlineStyle]}>
             <MaterialCommunityIcons
               name={"heart-outline"}

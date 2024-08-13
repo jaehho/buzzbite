@@ -12,7 +12,7 @@ const samplePosts = [
   {
     videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4',
     caption: "Caption Here",
-    id:1,
+    id: 1,
     likes: 10
     
 },
@@ -65,7 +65,16 @@ export default function HomeScreen() {
   //fetch posts
   useEffect(() => {
     const fetchPosts = async () => {
-      setPosts(samplePosts);
+      try 
+        {const response = await
+        fetch("http://localhost:8000", {
+          method: 'GET',
+        });
+        const json = await response.json();
+        setPosts(json);}
+      catch (error) { 
+        setPosts(samplePosts);
+      }
     };
 
     fetchPosts();
@@ -90,7 +99,6 @@ export default function HomeScreen() {
     <SafeAreaProvider>
     <View style={styles.container}>
       <StatusBar style="light" />
-      <AnimatedSplash/>
       <FlatList data={posts}
                 renderItem={({item}) => <VideoScreen post={item} activePostId ={activePostId}/>}
                 keyExtractor={( {id}, index )=> id.toString() + index.toString()}
