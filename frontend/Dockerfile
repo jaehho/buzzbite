@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 19000 19001 19002
 
 # Start the Expo CLI using npx
-CMD ["npx", "expo", "start", "--tunnel"]
+CMD ["npm", "start"]
