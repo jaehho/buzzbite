@@ -1,7 +1,6 @@
 from django.db import models
-from django.conf import settings
 
-class Content(models.Model):
+class Video(models.Model):
     id = models.AutoField(primary_key=True)
     videoSource = models.URLField()
     caption = models.TextField(blank=True)
@@ -9,7 +8,7 @@ class Content(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 '''
 {
