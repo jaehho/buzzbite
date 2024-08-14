@@ -6,32 +6,6 @@ from content.models import Video
 from users.models import CustomUser
 from .serializers import VideoSerializer, UserSerializer
 
-# @api_view(['GET'])
-# def getVideos(request):
-#     videos = Video.objects.all()
-#     serializer = VideoSerializer(videos, many=True)
-#     return Response(serializer.data)
-
-@api_view(['POST'])
-def get_videos(request):
-    username = request.data.get('username')
-    
-    if not username:
-        return Response({'error': 'Username is required'}, status=400)
-    
-    # Filter the database objects based on the username
-    videos = Video.objects.all()
-    
-    # Serialize the objects to JSON format
-    serializer = VideoSerializer(videos, many=True)
-    
-    return Response(serializer.data)
-
-'''
-{
-"username":"testuser"
-}
-'''
 
 @api_view(['POST'])
 def register(request):
@@ -68,7 +42,7 @@ def register(request):
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
-    user = authenticate(username=username, password=password)
+    user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
@@ -95,5 +69,26 @@ def create_video(request):
 "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4",
 "caption": "Caption Here",
 "likes": "10"
+}
+'''
+
+@api_view(['POST'])
+def get_videos(request):
+    username = request.data.get('username')
+    
+    if not username:
+        return Response({'error': 'Username is required'}, status=400)
+    
+    # Filter the database objects based on the username
+    videos = Video.objects.all()
+    
+    # Serialize the objects to JSON format
+    serializer = VideoSerializer(videos, many=True)
+    
+    return Response(serializer.data)
+
+'''
+{
+"username":"testuser"
 }
 '''
