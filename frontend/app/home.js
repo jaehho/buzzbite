@@ -53,12 +53,6 @@ const samplePosts = [
 
 export default function HomeScreen() {
 
-  
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
   const [activePostId, setActivePostId] = useState(samplePosts[0].id);
   const [posts, setPosts] = useState([]);
   
@@ -76,22 +70,24 @@ export default function HomeScreen() {
         });
         const json = await response.json();
         console.log("posts fetched from api");
-        console.log("json", json);
+        if(json.length === 0) {
+          throw new Error("no posts recieved");
+          return;
+        }
         setPosts(currentPosts => [...currentPosts, ...json]);
         
 
 
     } 
     catch (error) { 
-      console.log("posts fetched from sample posts; error");
+      console.log("posts fetched from sample posts; error", error);
       setPosts(currentPosts => [...currentPosts, ...samplePosts]);
       return;
     }
       
   };
 
-  
-  //fetch posts
+  //fetch posts on load
   useEffect(() => {
     fetchPosts();
   }, []);

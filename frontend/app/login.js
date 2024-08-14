@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, Pressable } from 'react-native';
 import { Redirect, Link, router } from 'expo-router';
 
 export default function LoginScreen() {
@@ -11,7 +11,7 @@ export default function LoginScreen() {
     // For now, we'll just show an alert with the entered details
     try 
     {const response = await
-        fetch("http://localhost:8000", {
+        fetch("http://localhost:8000/login/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -19,6 +19,7 @@ export default function LoginScreen() {
         body: JSON.stringify({ username: username, password: password}),
         });
         const json = await response.json();
+        console.log(json);
         console.log("positive login");
         router.replace('/home');
     } 
@@ -46,6 +47,9 @@ export default function LoginScreen() {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <Pressable onPress={() => router.navigate('/register')}>
+        <Text style = {styles.registerText}>Don't have an account? Register here</Text>
+      </Pressable>
       <Button title="Login" onPress={handleLogin} />
     </View>
   );
@@ -72,4 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
   },
+  registerText: {
+    textAlign: 'center',
+  }
 });
