@@ -20,7 +20,7 @@ def get_videos(request):
         return Response({'error': 'Username is required'}, status=400)
     
     # Filter the database objects based on the username
-    videos = Video.objects.filter(user__username=username)[:5]  # Adjust the filter criteria
+    videos = Video.objects.all()
     
     # Serialize the objects to JSON format
     serializer = VideoSerializer(videos, many=True)
