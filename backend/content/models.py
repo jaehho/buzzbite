@@ -9,12 +9,3 @@ class Video(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-'''
-{
-"videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4",
-"caption": "Caption Here",
-"id":"1",
-"likes": "10"
-}
-'''

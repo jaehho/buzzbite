@@ -27,6 +27,12 @@ def get_videos(request):
     
     return Response(serializer.data)
 
+'''
+{
+"username":"testuser"
+}
+'''
+
 @api_view(['POST'])
 def register(request):
     required_fields = ['username', 'email', 'password']
@@ -83,3 +89,11 @@ def create_video(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+'''
+{
+"videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4",
+"caption": "Caption Here",
+"likes": "10"
+}
+'''
