@@ -6,12 +6,6 @@ from content.models import Video
 from users.models import CustomUser
 from .serializers import VideoSerializer, UserSerializer
 
-# @api_view(['GET'])
-# def getVideos(request):
-#     videos = Video.objects.all()
-#     serializer = VideoSerializer(videos, many=True)
-#     return Response(serializer.data)
-
 @api_view(['POST'])
 def get_videos(request):
     username = request.data.get('username')
