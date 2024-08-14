@@ -53,32 +53,43 @@ const samplePosts = [
 
 export default function HomeScreen() {
 
-  
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
   const [activePostId, setActivePostId] = useState(samplePosts[0].id);
   const [posts, setPosts] = useState([]);
-
-  //fetch posts
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try 
-        {const response = await
+  
+  const fetchPosts = async () => {
+    const username = "testUser";
+    try 
+      {
+        const response = await
         fetch("http://localhost:8000", {
-          method: 'GET',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: username}),
         });
         const json = await response.json();
-        setPosts(json);}
-      catch (error) { 
-        setPosts(samplePosts);
-      }
-    };
+        console.log("posts fetched from api");
+        if(json.length === 0) {
+          throw new Error("no posts recieved");
+          return;
+        }
+        setPosts(currentPosts => [...currentPosts, ...json]);
+        
 
+
+    } 
+    catch (error) { 
+      console.log("posts fetched from sample posts; error", error);
+      setPosts(currentPosts => [...currentPosts, ...samplePosts]);
+      return;
+    }
+      
+  };
+
+  //fetch posts on load
+  useEffect(() => {
     fetchPosts();
-    console.log("posts fetched");
   }, []);
 
   const viewabilityConfigCallbackPairs= useRef([{
@@ -92,7 +103,7 @@ export default function HomeScreen() {
   ]);
 
   const onEndReached = useCallback(() => {
-    setPosts(currentPosts => [...currentPosts, ...samplePosts]);
+    fetchPosts();
   }, []);
 
   return (

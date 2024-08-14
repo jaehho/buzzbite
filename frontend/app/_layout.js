@@ -25,8 +25,10 @@ if(!appReady) {
   return <AnimatedSplash/>
 }
   return (
-    <Stack>
-      <Stack.Screen name="home"/>
+    <Stack screenOptions={{
+      // Hide the header for all other routes.
+      headerShown: false,
+    }}>
     </Stack>
   );
 }
