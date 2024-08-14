@@ -24,6 +24,7 @@ export default function LoginScreen() {
     } 
     catch (error) { 
         console.log("error");
+        router.replace('/home');
     }
     
   };

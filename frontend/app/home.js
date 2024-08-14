@@ -63,25 +63,31 @@ export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
   
   const fetchPosts = async () => {
-    //const username = "testUser";
+    const username = "testUser";
     try 
-      {const response = await
-      fetch("http://localhost:8000", {
-        method: 'GET',
-        // headers: {
-        //   'Content-Type': 'application/json',
-        // },
-        // body: JSON.stringify({ username: username}),
-      });
-      const json = await response.json();
-      console.log("posts fetched from api");
-      setPosts(currentPosts => [...currentPosts, ...json]);
-      
+      {
+        const response = await
+        fetch("http://localhost:8000", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: username}),
+        });
+        const json = await response.json();
+        console.log("posts fetched from api");
+        console.log("json", json);
+        setPosts(currentPosts => [...currentPosts, ...json]);
+        
+
+
     } 
     catch (error) { 
       console.log("posts fetched from sample posts; error");
       setPosts(currentPosts => [...currentPosts, ...samplePosts]);
+      return;
     }
+      
   };
 
   
