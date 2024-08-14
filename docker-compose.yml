@@ -22,14 +22,15 @@ services:
     env_file:
       - .env
 
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "19000:19000"
-  #     - "19001:19001"
-  #     - "19002:19002"
-  #   volumes:
-  #     - ./frontend:/app
+  frontend:
+    build: ./frontend
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    stdin_open: true   # Keep stdin open even if not attached
+    tty: true          # Allocate a pseudo-TTY
+
 
 volumes:
   postgres_data:

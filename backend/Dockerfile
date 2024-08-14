@@ -1,7 +1,7 @@
 # backend/Dockerfile
 
 # Use the official Python image as a base image
-FROM python:3.10
+FROM python:latest
 
 # Set the working directory
 WORKDIR /app
