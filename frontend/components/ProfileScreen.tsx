@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, FlatList, Dimensions, Button } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
+import { router } from 'expo-router';
 import VideoPreview from './VideoPreview';
 
 interface UserProfile {
@@ -9,9 +10,10 @@ interface UserProfile {
   following: number;
   posts: Array<{
     id: string;
-    content: string;
+    caption: string;
     videoSource: string;
   }>;
+  username: string;
 }
 
 const mockUserData: UserProfile = {
@@ -19,22 +21,44 @@ const mockUserData: UserProfile = {
   followers: 1200,
   following: 150,
   posts: [
-    { id: '1', content: 'Hello World!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
-    { id: '2', content: 'My second post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
-    { id: '3', content: 'Another post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
-    { id: '4', content: 'Yet another post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
-    { id: '5', content: 'Post five!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
-    { id: '6', content: 'Post six!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
+    { id: '1', caption: 'Hello World!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
+    { id: '2', caption: 'My second post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
+    { id: '3', caption: 'Another post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
+    { id: '4', caption: 'Yet another post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
+    { id: '5', caption: 'Post five!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
+    { id: '6', caption: 'Post six!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4' },
     // More posts...
   ],
+  username: 'testUser',
 };
+
+
 
 const numColumns = 3;
 const screenWidth = Dimensions.get('window').width;
 const itemWidth = screenWidth / numColumns;
 
 const ProfileScreen: React.FC = () => {
-  const { profilePicture, followers, following, posts } = mockUserData;
+  const { profilePicture, followers, following, posts, username } = mockUserData;
+
+  const fetchUserData = async () => {
+    try 
+    {const response = await
+        fetch("http://localhost:8000/login/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username}),
+        });
+        const json = await response.json();
+        console.log(json);
+        console.log("positive login");
+    } 
+    catch (error) { 
+        console.log("error");
+    }
+  };
 
   const formatData = (data: any[], numColumns: number) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
