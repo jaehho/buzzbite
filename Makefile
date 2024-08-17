@@ -3,12 +3,12 @@ ARG := $(word 2, $(MAKECMDGOALS))
 
 run: 
 ifeq ($(ARG),local)
-	$(MAKE) run_app_local
+	$(MAKE) run-local
 else
-	$(MAKE) run_app_docker
+	$(MAKE) run-docker
 endif
 
-run_app_local:
+run-local:
 	@echo "Starting Docker Compose..."
 	@docker-compose up -d
 	@echo "Navigating to the React Native project directory..."
@@ -21,7 +21,7 @@ run_app_local:
 	@docker-compose down
 
 
-run_app_docker:
+run-docker:
 	@echo "Starting Docker Compose and Expo..."
 	@docker-compose up -d
 	@echo "Starting the React Native Expo app..."
