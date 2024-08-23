@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.contrib.auth import authenticate, login
+from django.shortcuts import get_object_or_404
 from content.models import Video
 from users.models import CustomUser
 from .serializers import VideoSerializer, UserSerializer, ProfileSerializer
@@ -42,10 +43,14 @@ def register(request):
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
+    if not username or not password:
+        return Response({"detail": "Username and password are required"}, status=status.HTTP_400_BAD_REQUEST)
+
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+    
     return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 '''
@@ -72,35 +77,35 @@ def create_video(request):
 }
 '''
 
-@api_view(['POST'])
+@api_view(['GET'])
 def get_videos(request):
-    username = request.data.get('username', 'testuser')
+    username = request.query_params.get('username', 'testuser')
     
     if not username:
-        return Response({'error': 'Username is required'}, status=400)
+        return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
     
-    # Filter the database objects based on the username
-    videos = Video.objects.all()
+    videos = Video.objects.all()  # Ideally, filter by username if the model supports it
     
-    # Serialize the objects to JSON format
     serializer = VideoSerializer(videos, many=True)
     
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 '''
-{
-"username":"testuser"
-}
+GET /api/get-videos/?username=testuser
 '''
 
-@api_view(['POST'])
+@api_view(['GET'])
 def get_public_profile(request):
-    username = request.data.get('username')
+    username = request.query_params.get('username')
     
     if not username:
-        return Response({'error': 'Username is required'}, status=400)
+        return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
     
-    user = CustomUser.objects.get(username=username)
+    user = get_object_or_404(CustomUser, username=username)
 
     serializer = ProfileSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+'''
+GET /api/get-public-profile/?username=testuser
+'''

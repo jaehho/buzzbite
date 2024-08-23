@@ -1,5 +1,7 @@
 SHELL := /bin/bash
 
+.PHONY: backend
+
 expo_go_local:
 	@docker-compose up -d --scale frontend=0
 	@cd frontend/ && \
@@ -25,6 +27,11 @@ eas_build:
 	npm install && \
 	npm install -g eas-cli && \
 	eas build -p android -e development
+	@docker-compose down
+
+backend:
+	@docker-compose up -d --scale frontend=0
+	@docker-compose exec -it backend bash
 	@docker-compose down
 
 docker_build:
