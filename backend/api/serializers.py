@@ -11,3 +11,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = '__all__'
+
+class ProfileSerializer(serializers.ModelSerializer):
+    videos = VideoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'profile_picture', 'followers', 'following', 'videos']
