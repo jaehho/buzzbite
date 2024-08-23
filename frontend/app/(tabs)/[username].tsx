@@ -54,16 +54,15 @@ const ProfileScreen: React.FC = () => {
   const fetchUserData = async () => {
     try 
     {const response = await
-        fetch("http://localhost:8000/profile/", {
-        method: 'POST',
+        fetch(`http://localhost:8000/profile/?username=${username}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username: username}),
-        
         });
 
-        const json = await response.json();    
+        const json = await response.json();
+        // console.log(json);
         
         return json;
         
