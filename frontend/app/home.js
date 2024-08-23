@@ -15,7 +15,7 @@ const samplePosts = [
     id: 1,
     likes: 10
     
-},
+  },
   {
    videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/1.mp4',
    caption: "Caption Here",
@@ -53,11 +53,11 @@ const samplePosts = [
 
 export default function HomeScreen() {
 
-  const [activePostId, setActivePostId] = useState(samplePosts[0].id);
+  const [activePostId, setActivePostId] = useState(-1);
   const [posts, setPosts] = useState([]);
   
   const fetchPosts = async () => {
-    const username = "testUser";
+    const username = "tyler";
     try 
       {
         const response = await
@@ -75,8 +75,6 @@ export default function HomeScreen() {
           return;
         }
         setPosts(currentPosts => [...currentPosts, ...json]);
-        
-
 
     } 
     catch (error) { 
@@ -91,6 +89,14 @@ export default function HomeScreen() {
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  // useEffect(() => {
+  //   if(posts.length > 0){
+  //     setActivePostId(posts[0].id);
+  //   } else {
+  //     setActivePostId(-1);
+  //   }
+  // }, [posts]);
 
   const viewabilityConfigCallbackPairs= useRef([{
     viewabilityConfig: {itemVisiblePercentThreshold:80}, 

@@ -9,15 +9,17 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "white"
+      "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.buzzbitebeta"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.buzzbitebeta"
     },
     "web": {
       "bundler": "metro",
@@ -28,6 +30,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0ab7f8ec-b5ae-4ce5-aed5-78e1d7146395"
+      }
     }
   }
 }

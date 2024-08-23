@@ -2,7 +2,6 @@ import { Link } from 'expo-router';
 import React from 'react';
 import { View, Pressable, StyleSheet, PixelRatio } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 const NavBar = () => {
     return (
         <View style={styles.container}>
@@ -11,7 +10,7 @@ const NavBar = () => {
                 <Icon name="home" size={20} color="white" />
             </Pressable>
             </Link>
-            <Link href="/profile" asChild>
+            <Link href="/testuser" asChild>
             <Pressable style={styles.button} onPress={() => console.log('Profile button pressed')}>
                 <Icon name="user" size={20} color="white" />
             </Pressable>

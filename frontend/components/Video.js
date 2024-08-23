@@ -47,6 +47,7 @@ export default function VideoScreen(props) {
     //used to autoplay current video
   useEffect(() => {
     if(props.activePostId !== props.post.id) {
+      player.replay();
       player.pause();
       setIsPlaying(false);
       setShowPause(false);
