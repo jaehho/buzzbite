@@ -1,0 +1,79 @@
+[
+    {
+        "model": "content.video",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/1.mp4",
+            "caption": "Caption Here",
+            "likes": 0,
+            "upload_date": "2024-08-22T18:22:54.687Z"
+        }
+    },
+    {
+        "model": "content.video",
+        "pk": 2,
+        "fields": {
+            "user": 1,
+            "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4",
+            "caption": "Caption Here",
+            "likes": 10,
+            "upload_date": "2024-08-23T14:51:02.314Z"
+        }
+    },
+    {
+        "model": "content.video",
+        "pk": 3,
+        "fields": {
+            "user": 1,
+            "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/3.mp4",
+            "caption": "Caption Here",
+            "likes": 0,
+            "upload_date": "2024-08-23T14:51:02.314Z"
+        }
+    },
+    {
+        "model": "users.customuser",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$QLQXlY0kgM6l9fWzpugcMU$TjuMlkqjTblz2YdpD1n11TCu1ObG9i40W/chfLn7+kc=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "testuser",
+            "first_name": "",
+            "last_name": "",
+            "email": "testuser@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2024-08-22T18:19:14.450Z",
+            "profile_picture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png",
+            "followers": 0,
+            "following": 0,
+            "bio": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.customuser",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$6N69N2pI1oX2HjPuqjecW5$9iYCg9efHfng+8WhMpXsFzbLFK7A/Jru4kEbPX3fqsk=",
+            "last_login": "2024-08-23T14:52:27.377Z",
+            "is_superuser": true,
+            "username": "jaeho",
+            "first_name": "",
+            "last_name": "",
+            "email": "jaeho2025@gmail.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-08-22T18:22:24.245Z",
+            "profile_picture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png",
+            "followers": 0,
+            "following": 0,
+            "bio": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]
