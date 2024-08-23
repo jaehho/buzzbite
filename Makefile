@@ -1,86 +1,35 @@
-SHELL := /bin/bash # Use bash syntax
-ARG := $(word 2, $(MAKECMDGOALS))
+SHELL := /bin/bash
 
-run: 
-ifeq ($(ARG),local)
-	$(MAKE) run-local
-else
-	$(MAKE) run-docker
-endif
-
-run-local:
-	@echo "Starting Docker Compose..."
-	@docker-compose up -d
-	@echo "Navigating to the React Native project directory..."
+expo_go_local:
+	@docker-compose up -d --scale frontend=0
 	@cd frontend/ && \
-	echo "Installing dependencies..." && \
 	npm install && \
-	echo "Starting the React Native Expo app..." && \
-	npm start
-	@echo "Stopping Docker Compose..."
+	npx expo start
 	@docker-compose down
 
-
-run-docker:
-	@echo "Starting Docker Compose and Expo..."
+expo_go_docker:
 	@docker-compose up -d
-	@echo "Starting the React Native Expo app..."
-	@docker-compose exec -it frontend npm start
-	@echo "Stopping Docker Compose..."
+	@docker-compose exec -it frontend npx expo start --tunnel
+	@docker-compose down -t 1
+
+dev:
+	@docker-compose up -d --scale frontend=0
+	@cd frontend/ && \
+	npm install && \
+	eas build:run && \
+	npx expo start
 	@docker-compose down
 
-### From boilerplate
+eas_build:
+	@cd frontend/ && \
+	npm install && \
+	npm install -g eas-cli && \
+	eas build -p android -e development
+	@docker-compose down
+
+docker_build:
+	@docker-compose build
+
 clean:
 	@find . -name "*.pyc" -exec rm -rf {} \;
 	@find . -name "__pycache__" -delete
-
-test:
-	poetry run backend/manage.py test backend/ $(ARG) --parallel --keepdb
-
-test_reset:
-	poetry run backend/manage.py test backend/ $(ARG) --parallel
-
-backend_format:
-	black backend
-
-# Commands for Docker version
-docker_setup:
-	docker volume create {{project_name}}_dbdata
-	docker compose build --no-cache backend
-	docker compose run --rm backend python manage.py spectacular --color --file schema.yml
-	docker compose run frontend npm install
-	docker compose run --rm frontend npm run openapi-ts
-
-docker_test:
-	docker compose run backend python manage.py test $(ARG) --parallel --keepdb
-
-docker_test_reset:
-	docker compose run backend python manage.py test $(ARG) --parallel
-
-docker_up:
-	docker compose up -d
-
-docker_update_dependencies:
-	docker compose down
-	docker compose up -d --build
-
-docker_down:
-	docker compose down
-
-docker_logs:
-	docker compose logs -f $(ARG)
-
-docker_makemigrations:
-	docker compose run --rm backend python manage.py makemigrations
-
-docker_migrate:
-	docker compose run --rm backend python manage.py migrate
-
-docker_backend_shell:
-	docker compose run --rm backend bash
-
-docker_backend_update_schema:
-	docker compose run --rm backend python manage.py spectacular --color --file schema.yml
-
-docker_frontend_update_api:
-	docker compose run --rm frontend npm run openapi-ts

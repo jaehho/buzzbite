@@ -23,13 +23,17 @@ services:
       - .env
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      args:
+        EXPO_USERNAME: ${EXPO_USERNAME}
+        EXPO_PASSWORD: ${EXPO_PASSWORD}
     ports:
       - "19000:19000"
       - "19001:19001"
       - "19002:19002"
-    stdin_open: true   # Keep stdin open even if not attached
-    tty: true          # Allocate a pseudo-TTY
+    stdin_open: true
+    tty: true
 
 
 volumes:
