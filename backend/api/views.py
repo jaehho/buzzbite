@@ -4,7 +4,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate, login
 from content.models import Video
 from users.models import CustomUser
-from .serializers import VideoSerializer, UserSerializer
+from .serializers import VideoSerializer, UserSerializer, ProfileSerializer
 
 
 @api_view(['POST'])
@@ -74,7 +74,7 @@ def create_video(request):
 
 @api_view(['POST'])
 def get_videos(request):
-    username = request.data.get('username')
+    username = request.data.get('username', 'testuser')
     
     if not username:
         return Response({'error': 'Username is required'}, status=400)
@@ -92,3 +92,15 @@ def get_videos(request):
 "username":"testuser"
 }
 '''
+
+@api_view(['POST'])
+def get_public_profile(request):
+    username = request.data.get('username')
+    
+    if not username:
+        return Response({'error': 'Username is required'}, status=400)
+    
+    user = CustomUser.objects.get(username=username)
+
+    serializer = ProfileSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
