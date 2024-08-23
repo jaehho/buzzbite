@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedStyle,
   Extrapolate,
   interpolate,
+  Extrapolation,
 } from "react-native-reanimated";
 import { useState } from 'react';
 import { Pressable, View, Button, StyleSheet, Text } from "react-native";
@@ -22,7 +23,7 @@ const LikeButton = (props) => {
     return {
       transform: [
         {
-          scale: interpolate(liked.value, [0, 1], [1, 0], Extrapolate.CLAMP),
+          scale: interpolate(liked.value, [0, 1], [1, 0], Extrapolation.CLAMP),
         },
       ],
     };

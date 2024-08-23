@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { Dimensions, StyleSheet, View, FlatList} from 'react-native';
+import { StyleSheet, View, FlatList} from 'react-native';
 import { useCallback, useState, useRef, useEffect } from 'react';
 import VideoScreen from '../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+
 import NavBar from '../components/NavBar';
-import AnimatedSplash from '../components/AnimatedSplash';
+
 
 
 const samplePosts = [
@@ -90,16 +90,9 @@ export default function HomeScreen() {
     fetchPosts();
   }, []);
 
-  // useEffect(() => {
-  //   if(posts.length > 0){
-  //     setActivePostId(posts[0].id);
-  //   } else {
-  //     setActivePostId(-1);
-  //   }
-  // }, [posts]);
 
   const viewabilityConfigCallbackPairs= useRef([{
-    viewabilityConfig: {itemVisiblePercentThreshold:80}, 
+    viewabilityConfig: {itemVisiblePercentThreshold:99}, 
     onViewableItemsChanged: ({changed, viewableItems}) => {
       if (viewableItems.length >0 && viewableItems[0].isViewable) {
         setActivePostId(viewableItems[0].item.id);
@@ -125,7 +118,7 @@ export default function HomeScreen() {
                 onEndReachedThreshold={1}
       />
     </View>
-    <NavBar/>
+    
     </SafeAreaProvider>
   );
 }

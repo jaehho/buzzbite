@@ -29,6 +29,7 @@ if(!appReady) {
       // Hide the header for all other routes.
       headerShown: false,
     }}>
+    <NavBar/>
     </Stack>
   );
 }

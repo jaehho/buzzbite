@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     margin: 1,
-    height: 200, // approximate a square
+    height: 200,
   },
   itemInvisible: {
     backgroundColor: 'transparent',
