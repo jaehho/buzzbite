@@ -1,15 +1,14 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React from 'react';
 import { View, Pressable, StyleSheet, PixelRatio } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const NavBar = () => {
     return (
         <View style={styles.container}>
-            <Link href="/Splash" asChild>
-            <Pressable style={styles.button} onPress={() => console.log('Home button pressed')}>
+
+            <Pressable style={styles.button} onPress={() => router.navigate('/(tabs)/home')}>
                 <Icon name="home" size={20} color="white" />
             </Pressable>
-            </Link>
             <Link href="/testuser" asChild>
             <Pressable style={styles.button} onPress={() => console.log('Profile button pressed')}>
                 <Icon name="user" size={20} color="white" />

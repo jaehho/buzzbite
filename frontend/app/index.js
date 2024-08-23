@@ -1,5 +1,5 @@
 import { Redirect } from "expo-router";
-import HomeScreen from "./home";
+import HomeScreen from "./(tabs)/home";
 
 export default function RootLayout() {
 

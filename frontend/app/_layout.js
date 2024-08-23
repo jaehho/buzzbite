@@ -25,11 +25,13 @@ if(!appReady) {
   return <AnimatedSplash/>
 }
   return (
+
     <Stack screenOptions={{
       // Hide the header for all other routes.
       headerShown: false,
     }}>
-    <NavBar/>
+    
     </Stack>
+
   );
 }
