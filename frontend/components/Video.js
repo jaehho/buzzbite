@@ -1,12 +1,13 @@
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Pressable, Text, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Pressable, Text, useWindowDimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from  'expo-linear-gradient';
 import LikeButton from './LikeButton';
 import CommentModal from './CommentModal';
+import ProfilePictureIcon from './ProfilePictureIcon';
 import { GestureDetector } from 'react-native-gesture-handler';
 
 export default function VideoScreen(props) {
@@ -113,9 +114,10 @@ export default function VideoScreen(props) {
 
 
               <View style = {styles.rightColumn}>
+                 <ProfilePictureIcon user = {'testuser'} imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png"/>
                  <LikeButton likes={props.post.likes}/>
                  <Pressable onPress = {startComments}>
-                 <MaterialCommunityIcons name="comment-outline" size={24} color="white" />
+                  <MaterialCommunityIcons name="comment-outline" size={30} color="white" />
                  </Pressable>
               </View >
             </View> 
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     bottom: 0,
-    padding: 10,
+    paddingLeft: 10,
     paddingRight: 0,
     paddingBottom: 20,
     flexDirection: 'row', 
@@ -157,10 +159,8 @@ const styles = StyleSheet.create({
 
   },
   rightColumn: {
-    marginTop: 'auto',
     gap: 10,
-    marginLeft: 'auto',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   leftColumn: {

@@ -68,6 +68,7 @@ export default function HomeScreen() {
         });
         const json = await response.json();
         console.log("posts fetched from api");
+        console.log(json);
         if(json.length === 0) {
           throw new Error("no posts recieved");
           return;

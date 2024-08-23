@@ -62,8 +62,9 @@ const ProfileScreen: React.FC = () => {
         body: JSON.stringify({ username: username}),
         
         });
+
         const json = await response.json();    
-        console.log("profile recieved");
+        
         return json;
         
         
