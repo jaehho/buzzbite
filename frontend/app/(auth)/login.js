@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert, Pressable } from 'react-native';
 import { Redirect, Link, router } from 'expo-router';
+import { AuthContext } from '../../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const { login, user } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log(user);
+    AsyncStorage.getItem('@user_token').then((value) => { console.log(value); }); 
+  }, [user]);
   const handleLogin = async() => {
-    // Perform login logic here
-    // For now, we'll just show an alert with the entered details
     try 
     {const response = await
         fetch("http://localhost:8000/login/", {
@@ -21,11 +27,11 @@ export default function LoginScreen() {
         const json = await response.json();
         console.log(json);
         console.log("positive login");
-        router.replace('/home');
+        // router.replace('/home');
     } 
     catch (error) { 
         console.log("error");
-        router.replace('/home');
+        // router.replace('/home');
     }
     
   };
@@ -50,7 +56,9 @@ export default function LoginScreen() {
       <Pressable onPress={() => router.navigate('/register')}>
         <Text style = {styles.registerText}>Don't have an account? Register here</Text>
       </Pressable>
-      <Button title="Login" onPress={handleLogin} />
+      <Button title="Login" onPress={() => {
+        login(username, password);
+        router.navigate('/home')}}/>
     </View>
   );
 }

@@ -10,25 +10,24 @@ export const AuthProvider = ({ children }) => {
   
   const { getItem, setItem, removeItem } = useAsyncStorage('@user_token');
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      setLoading(true);
-      const token = await getItem();
-      if (token) {
-        const userData = await authService.getUserData(token);  // Fetch user data with token
-        setUser(userData);
-      }
-      setLoading(false);
-    };
+  // useEffect(() => {
+  //   const loadUserData = async () => {
+  //     setLoading(true);
+  //     const token = await getItem();
+  //     if (token) {
+  //       const userData = await authService.getUserData(token);  // Fetch user data with token
+  //       setUser(userData);
+  //     }
+  //     setLoading(false);
+  //   };
 
-    loadUserData();
-  }, []);
+  //   loadUserData();
+  // }, []);
 
   const login = async (username, password) => {
-    const token = await authService.login(username, password);
-    await setItem(token);
-    const userData = await authService.getUserData(token);
-    setUser(userData);
+    const loginData = await authService.login(username, password);
+    await setItem(loginData.token);
+    setUser(loginData.user);
   };
 
   const logout = async () => {

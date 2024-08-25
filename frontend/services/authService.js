@@ -7,14 +7,14 @@ const API_BASE_URL = 'http://localhost:8000';
 const authService = {
   login: async (username, password) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/login/`, {
-        username,
-        password,
-      });
+      // const response = await axios.post(`${API_BASE_URL}/login/`, {
+      //   username,
+      //   password,
+      // });
 
-      const { token, user } = response.data;
+      const { token, user } = {token: "testtoken", user: "testuser"};
       await AsyncStorage.setItem('@user_token', token);
-      return user;
+      return {token: token, user: user};
     } catch (error) {
       throw new Error('Login failed: ' + error.response.data.message);
     }
@@ -22,13 +22,15 @@ const authService = {
   
   signup: async (username, email, password) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/register/`, {
-        username,
-        email,
-        password,
-      });
+      // const response = await axios.post(`${API_BASE_URL}/register/`, {
+      //   username,
+      //   email,
+      //   password,
+      // });
 
-      const { token, user } = response.data;
+      // const { token, user } = response.data;
+
+      const { token, user} = {token: "testtoken", user: "testuser"};
       await AsyncStorage.setItem('@user_token', token);
       return user;
     } catch (error) {

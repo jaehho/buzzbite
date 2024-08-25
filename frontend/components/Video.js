@@ -114,7 +114,7 @@ export default function VideoScreen(props) {
 
 
               <View style = {styles.rightColumn}>
-                 <ProfilePictureIcon user = {'testuser'} imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png"/>
+                 <ProfilePictureIcon user = {props.post.username} imageUrl = {props.post.profile_picture}/>
                  <LikeButton likes={props.post.likes}/>
                  <Pressable onPress = {startComments}>
                   <MaterialCommunityIcons name="comment-outline" size={30} color="white" />

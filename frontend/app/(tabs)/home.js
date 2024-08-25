@@ -1,9 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, FlatList} from 'react-native';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useContext, useCallback, useState, useRef, useEffect } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 
 
 const samplePosts = [
@@ -59,12 +58,13 @@ export default function HomeScreen() {
     try 
       {
         const response = await
-        fetch(`http://localhost:8000/?username=${username}`, {
+        fetch(`http://localhost:8000/videos/?username=${username}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
+        console.log(response);
         const json = await response.json();
         console.log("posts fetched from api");
         // console.log(json);
@@ -112,7 +112,7 @@ export default function HomeScreen() {
       <StatusBar style="light" />
       <FlatList data={posts}
                 renderItem={({item}) => <VideoScreen post={item} activePostId ={activePostId}/>}
-                keyExtractor={( {id}, index )=> id.toString() + index.toString()}
+                keyExtractor={( {id}, index )=> index.toString()}
                 pagingEnabled
                 viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
                 onEndReached={onEndReached}

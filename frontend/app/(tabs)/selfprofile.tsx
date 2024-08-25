@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { router, useLocalSearchParams, useGlobalSearchParams } from 'expo-router';
 import VideoPreview from '../../components/VideoPreview';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { AuthContext } from '../../context/AuthContext';
 
 interface UserProfile {
   profilePicture: string;
@@ -46,15 +47,14 @@ const ProfileScreen: React.FC = () => {
   const [following, setFollowing] = useState<number>(0);
   const [posts, setPosts] = useState<Array<any>>([]);
 
-  const { username } = useLocalSearchParams();
 
-  
+  const {user} = useContext(AuthContext);
   
 
   const fetchUserData = async () => {
     try 
     {const response = await
-        fetch(`http://localhost:8000/profile/?username=${username}`, {
+        fetch(`http://localhost:8000/profile/?username=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -110,13 +110,10 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Pressable onPress={() => router.back()} style = {styles.backButton}>
-        <AntDesign name="left" size={24} color="black" />
-      </Pressable>
       <View style={styles.header}>
         {profilePicture && <Image source={{ uri: profilePicture }} style={styles.profilePicture} />}
         <View style={styles.headerTextContainer}>
-        <Text style={styles.stat}>@{username}</Text>
+        <Text style={styles.stat}>@{user}</Text>
           <View style={styles.statsContainer}>
             <Text style={styles.stat}>{followers} Followers</Text>
             <Text style={styles.stat}>{following} Following</Text>
