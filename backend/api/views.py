@@ -74,7 +74,7 @@ class VideoListCreateView(generics.ListCreateAPIView):
         username = self.request.query_params.get('username')
         
         if username:
-            queryset = queryset.filter(user__username=username)
+            queryset = queryset.filter(user__username=username) # TODO: currently filters for videos posted by user, logic should be filter by videos user has viewed
         
         return queryset[:5]  # most recent 5 videos
 

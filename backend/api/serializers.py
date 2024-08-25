@@ -13,7 +13,7 @@ class VideoSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Video
-        fields = ['username', 'profile_picture', 'videoSource', 'caption', 'likes', 'upload_date']
+        fields = ['id', 'username', 'profile_picture', 'videoSource', 'caption', 'likes', 'upload_date']
 
 class ProfileSerializer(serializers.ModelSerializer):
     videos = VideoSerializer(many=True, read_only=True)
