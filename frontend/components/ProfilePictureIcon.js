@@ -6,7 +6,7 @@ const ProfilePictureIcon = ({ imageUrl, user }) => {
 
 
     const handlePress = () => {
-        router.navigate(`/(tabs)/${user}`);
+        router.navigate(`/${user}`);
     };
     return (
         <Pressable onPress={handlePress} style ={styles.profileImgContainer}>
