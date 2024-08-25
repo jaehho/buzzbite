@@ -31,7 +31,12 @@ eas_build:
 
 backend:
 	@docker-compose up -d --scale frontend=0
-	@docker-compose exec -it backend bash
+	- @docker-compose exec -it backend bash
+	@docker-compose down
+
+resetdb:
+	@docker-compose up -d --scale frontend=0
+	@docker-compose exec backend python manage.py resetdb
 	@docker-compose down
 
 docker_build:

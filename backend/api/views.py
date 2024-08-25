@@ -9,7 +9,7 @@ from .serializers import VideoSerializer, UserSerializer, ProfileSerializer
 
 
 @api_view(['POST'])
-def register(request):
+def register_user(request):
     required_fields = ['username', 'email', 'password']
     missing_fields = [field for field in required_fields if field not in request.data]
 
@@ -40,7 +40,7 @@ def register(request):
 '''
 
 @api_view(['POST'])
-def login_view(request):
+def login_user(request):
     username = request.data.get('username')
     password = request.data.get('password')
     if not username or not password:
