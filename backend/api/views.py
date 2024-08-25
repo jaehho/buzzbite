@@ -66,15 +66,18 @@ class VideoListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """
+        Returns the most recent 5 videos by default.
         Optionally restricts the returned videos to a given user,
         by filtering against a `username` query parameter in the URL.
-        By default, returns the most recently created 5 videos.
         """
-        queryset = Video.objects.all().order_by('-created_at')[:5]
+        queryset = Video.objects.all().order_by('-upload_date')
         username = self.request.query_params.get('username')
+        
         if username:
             queryset = queryset.filter(user__username=username)
-        return queryset
+        
+        return queryset[:5]  # most recent 5 videos
+
 
 @api_view(['GET'])
 def get_public_profile(request):
