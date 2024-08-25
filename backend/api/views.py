@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework import generics
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
 from content.models import Video
@@ -60,39 +61,20 @@ def login_user(request):
 }
 ''' 
 
-@api_view(['POST'])
-def create_video(request):
-    serializer = VideoSerializer(data=request.data)
-    
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class VideoListCreateView(generics.ListCreateAPIView):
+    serializer_class = VideoSerializer
 
-'''
-{
-"videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4",
-"caption": "Caption Here",
-"likes": "10"
-}
-'''
-
-@api_view(['GET'])
-def get_videos(request):
-    username = request.query_params.get('username', 'testuser')
-    
-    if not username:
-        return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    videos = Video.objects.all()  # Ideally, filter by username if the model supports it
-    
-    serializer = VideoSerializer(videos, many=True)
-    
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-'''
-GET /api/get-videos/?username=testuser
-'''
+    def get_queryset(self):
+        """
+        Optionally restricts the returned videos to a given user,
+        by filtering against a `username` query parameter in the URL.
+        By default, returns the most recently created 5 videos.
+        """
+        queryset = Video.objects.all().order_by('-created_at')[:5]
+        username = self.request.query_params.get('username')
+        if username:
+            queryset = queryset.filter(user__username=username)
+        return queryset
 
 @api_view(['GET'])
 def get_public_profile(request):
@@ -102,7 +84,6 @@ def get_public_profile(request):
         return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
     
     user = get_object_or_404(CustomUser, username=username)
-
     serializer = ProfileSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
