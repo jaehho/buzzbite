@@ -55,14 +55,12 @@ export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
   
   const { user } = useContext(AuthContext);
-  const username = user;
 
   const fetchPosts = async () => {
-    
     try 
       {
         const response = await
-        fetch(`http://localhost:8000/videos/?username=${username}`, {
+        fetch(`http://localhost:8000/videos/?username=${user}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

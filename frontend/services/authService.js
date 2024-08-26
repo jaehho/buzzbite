@@ -16,6 +16,7 @@ const authService = {
       const { token, user } = {token: "testtoken", user: "testuser"};
       await AsyncStorage.setItem('@user_token', token);
       return {token: token, user: user};
+
     } catch (error) {
       throw new Error('Login failed: ' + error.response.data.message);
     }

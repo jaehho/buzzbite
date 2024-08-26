@@ -3,12 +3,15 @@ import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { AuthContext } from '../../context/AuthContext';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const { login } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
 
   useEffect(() => {
     if(username !== '' && password != '') {
@@ -17,6 +20,15 @@ export default function LoginScreen() {
       setIsEnabled(false);
     }
   }, [username, password]);
+
+  // useEffect(() => {
+  //   console.log(user);
+  //   AsyncStorage.getItem('@user_token').then((value) => { console.log(value); }); 
+  // }, [user]);
+
+  const handleLogin = async () => {
+    login(username, password);
+  }
 
   return (
     <View style={styles.container}>
@@ -40,7 +52,7 @@ export default function LoginScreen() {
       </Pressable>
       <View style = {isEnabled ? styles.loginButtonEnabled : styles.loginButtonError}>
         <Pressable 
-          onPress={() =>{login(username,password).then(router.navigate('/home'))}}
+          onPress={() => {handleLogin()}}
           disabled={!isEnabled}
           style = {(pressedData) => pressedData.pressed && styles.pressed}
         >

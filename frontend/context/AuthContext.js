@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import authService from '../services/authService.js';
+import {router} from 'expo-router';
 
 export const AuthContext = createContext();
 
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     const loginData = await authService.login(username, password);
     await setItem(loginData.token);
     setUser(loginData.user);
+    router.navigate('/home');
   };
 
   const logout = async () => {
