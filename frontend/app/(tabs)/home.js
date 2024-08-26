@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, FlatList} from 'react-native';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useContext, useCallback, useState, useRef, useEffect } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { AuthContext } from '../../context/AuthContext';
 
 
 const samplePosts = [
@@ -54,20 +54,21 @@ export default function HomeScreen() {
   const [activePostId, setActivePostId] = useState(-1);
   const [posts, setPosts] = useState([]);
   
+  const { user } = useContext(AuthContext);
+
   const fetchPosts = async () => {
-    const username = "testuser";
     try 
       {
         const response = await
-        fetch(`http://localhost:8000/?username=${username}`, {
+        fetch(`http://localhost:8000/videos/?username=${user}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
         const json = await response.json();
-        console.log("posts fetched from api");
         // console.log(json);
+        console.log(response.status);
         if(json.length === 0) {
           throw new Error("no posts recieved");
         }
@@ -76,6 +77,7 @@ export default function HomeScreen() {
     } 
     catch (error) { 
       console.log("posts fetched from sample posts; error", error);
+      
       setPosts(currentPosts => [...currentPosts, ...samplePosts]);
       return;
     }
@@ -112,7 +114,7 @@ export default function HomeScreen() {
       <StatusBar style="light" />
       <FlatList data={posts}
                 renderItem={({item}) => <VideoScreen post={item} activePostId ={activePostId}/>}
-                keyExtractor={( {id}, index )=> id.toString() + index.toString()}
+                keyExtractor={( {id}, index )=> index.toString()}
                 pagingEnabled
                 viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
                 onEndReached={onEndReached}

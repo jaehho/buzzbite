@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, Pressable } from 'react-native';
-import { Redirect, Link, router } from 'expo-router';
+import React, { useEffect, useState, useContext} from 'react';
+import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import { router } from 'expo-router';
+import { AuthContext } from '../../context/AuthContext';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isEnabled, setIsEnabled] = useState(false);
 
-  const handleLogin = async() => {
-    // Perform login logic here
-    // For now, we'll just show an alert with the entered details
-    try 
-    {const response = await
-        fetch("http://localhost:8000/login/", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: username, password: password}),
-        });
-        const json = await response.json();
-        console.log(json);
-        console.log("positive login");
-        router.replace('/home');
-    } 
-    catch (error) { 
-        console.log("error");
-        router.replace('/home');
+  const { login, user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if(username !== '' && password != '') {
+      setIsEnabled(true);
+    } else {
+      setIsEnabled(false);
     }
-    
-  };
+  }, [username, password]);
+
+  // useEffect(() => {
+  //   console.log(user);
+  //   AsyncStorage.getItem('@user_token').then((value) => { console.log(value); }); 
+  // }, [user]);
+
+  const handleLogin = async () => {
+    login(username, password);
+  }
 
   return (
     <View style={styles.container}>
@@ -50,7 +50,15 @@ export default function LoginScreen() {
       <Pressable onPress={() => router.navigate('/register')}>
         <Text style = {styles.registerText}>Don't have an account? Register here</Text>
       </Pressable>
-      <Button title="Login" onPress={handleLogin} />
+      <View style = {isEnabled ? styles.loginButtonEnabled : styles.loginButtonError}>
+        <Pressable 
+          onPress={() => {handleLogin()}}
+          disabled={!isEnabled}
+          style = {(pressedData) => pressedData.pressed && styles.pressed}
+        >
+          <Text style = {isEnabled ? styles.loginTextEnabled : styles.loginTextError }>Log In</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -76,7 +84,36 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
   },
-  registerText: {
+  loginText: {
+    
+  },
+  loginButtonEnabled: {
+    padding: 10,
+    backgroundColor: '#0095f6',
+    fontWeight: 'bold',
+    marginVertical: 5,
+    borderRadius: 5,
+  },
+  loginButtonError: {
+    padding: 10,
+    backgroundColor: '#67b5fa',
+    fontWeight: 'bold',
+    marginVertical: 5,
+    borderRadius: 5,
+  },
+  loginTextEnabled: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
     textAlign: 'center',
-  }
+  },
+  loginTextError: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  pressed: {
+    opacity: 0.5,
+  },
 });

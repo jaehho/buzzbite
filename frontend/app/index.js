@@ -1,13 +1,17 @@
 import { Redirect } from "expo-router";
-import HomeScreen from "./(tabs)/home";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function RootLayout() {
 
+  const { user } = useContext(AuthContext);
   const loggedIn = false;
-  if(!loggedIn) {
+  
+  if(user === null) {
     return <Redirect href="/login" />;
-  }
+  }      
   return (
-  <HomeScreen/>
-  )
+      <Redirect href="/home" />
+    );
+  
 };
