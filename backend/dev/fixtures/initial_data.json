@@ -3,7 +3,7 @@
         "model": "content.video",
         "pk": 1,
         "fields": {
-            "user": 3,
+            "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/1.mp4",
             "caption": "Caption Here",
             "likes": 0,
@@ -14,7 +14,7 @@
         "model": "content.video",
         "pk": 2,
         "fields": {
-            "user": 3,
+            "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4",
             "caption": "Caption Here",
             "likes": 10,
@@ -25,7 +25,7 @@
         "model": "content.video",
         "pk": 3,
         "fields": {
-            "user": 3,
+            "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/3.mp4",
             "caption": "Caption Here",
             "likes": 0,
@@ -36,7 +36,7 @@
         "model": "content.video",
         "pk": 4,
         "fields": {
-            "user": 3,
+            "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/4.mp4",
             "caption": "Caption Here",
             "likes": 0,
@@ -47,7 +47,7 @@
         "model": "content.video",
         "pk": 5,
         "fields": {
-            "user": 3,
+            "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4",
             "caption": "Caption Here",
             "likes": 0,
@@ -58,7 +58,7 @@
         "model": "content.video",
         "pk": 6,
         "fields": {
-            "user": 3,
+            "owner": 3,
             "videoSource": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             "caption": "Horizontal Video",
             "likes": 0,

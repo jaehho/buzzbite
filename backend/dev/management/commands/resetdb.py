@@ -82,7 +82,7 @@ class Command(BaseCommand):
             raise CommandError(f'Applying migrations failed: {e}')
 
         # Step 5: Load data from a fixture
-        fixture_file = getattr(settings, 'FIXTURE_FILE_PATH', 'core/fixtures/initial_data.json')
+        fixture_file = getattr(settings, 'FIXTURE_FILE_PATH', 'dev/fixtures/initial_data.json')
         self.stdout.write(self.style.WARNING(f'Loading data from fixture: {fixture_file}'))
         try:
             call_command('loaddata', fixture_file)
