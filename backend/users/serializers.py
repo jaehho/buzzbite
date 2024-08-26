@@ -2,11 +2,7 @@ from rest_framework import serializers
 from .models import CustomUser
 from content.serializers import VideoSerializer
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = CustomUser
-#         fields = '__all__'
-        
+  
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CustomUser
