@@ -55,23 +55,21 @@ export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
   
   const fetchPosts = async () => {
-    const username = "tyler";
+    const username = "testuser";
     try 
       {
         const response = await
-        fetch("http://localhost:8000", {
-          method: 'POST',
+        fetch(`http://localhost:8000/?username=${username}`, {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: username}),
         });
         const json = await response.json();
         console.log("posts fetched from api");
-        console.log(json);
+        // console.log(json);
         if(json.length === 0) {
           throw new Error("no posts recieved");
-          return;
         }
         setPosts(currentPosts => [...currentPosts, ...json]);
 
@@ -87,6 +85,10 @@ export default function HomeScreen() {
   //fetch posts on load
   useEffect(() => {
     fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    setActivePostId(posts[0]?.id);
   }, []);
 
 

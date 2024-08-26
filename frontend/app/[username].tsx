@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { router, useLocalSearchParams, useGlobalSearchParams } from 'expo-router';
-import VideoPreview from '../../components/VideoPreview';
+import VideoPreview from '../components/VideoPreview';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -54,16 +54,15 @@ const ProfileScreen: React.FC = () => {
   const fetchUserData = async () => {
     try 
     {const response = await
-        fetch("http://localhost:8000/profile/", {
-        method: 'POST',
+        fetch(`http://localhost:8000/profile/?username=${username}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username: username}),
-        
         });
 
-        const json = await response.json();    
+        const json = await response.json();
+        // console.log(json);
         
         return json;
         
