@@ -4,6 +4,7 @@ import { useContext, useCallback, useState, useRef, useEffect } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 
 
 const samplePosts = [
@@ -59,20 +60,21 @@ export default function HomeScreen() {
   const fetchPosts = async () => {
     try 
       {
-        const response = await
-        fetch(`http://localhost:8000/videos/?username=${user}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const json = await response.json();
+        // const response = await
+        // fetch(`http://localhost:8000/videos/?username=${user}`, {
+        //   method: 'GET',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        // });
+        const response = await api.get(`/content/videos/?username=${user}`);
+        // const json = await response.json();
         // console.log(json);
         console.log(response.status);
-        if(json.length === 0) {
+        if(response.data.length === 0) {
           throw new Error("no posts recieved");
         }
-        setPosts(currentPosts => [...currentPosts, ...json]);
+        setPosts(currentPosts => [...currentPosts, ...response.data]);
 
     } 
     catch (error) { 

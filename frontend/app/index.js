@@ -7,7 +7,6 @@ export default function RootLayout() {
 
   const { user } = useContext(AuthContext);
   const token = AsyncStorage.getItem('@user_token');
-  const loggedIn = false;
   
   if(user === null) {
     return <Redirect href="/login" />;

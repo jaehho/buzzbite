@@ -9,6 +9,7 @@ import LikeButton from './LikeButton';
 import CommentModal from './CommentModal';
 import ProfilePictureIcon from './ProfilePictureIcon';
 import { GestureDetector } from 'react-native-gesture-handler';
+import api from '../services/api'
 
 export default function VideoScreen(props) {
 
@@ -18,6 +19,7 @@ export default function VideoScreen(props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPause, setShowPause] = useState(false);
   const [commentsVisable, setCommentsVisable] = useState(false);
+  const [hasBeenViewed, sethasBeenViewed] = useState(false);
 
   const [comments, setComments] = useState([]);
 
@@ -58,6 +60,10 @@ export default function VideoScreen(props) {
       player.play();
       setIsPlaying(true);
       setShowPause(false);
+      if(!hasBeenViewed) {
+        // api.post('insert api endpoint here');
+        sethasBeenViewed(true);
+      }
     }
   }, [props.activePostId]);
 
