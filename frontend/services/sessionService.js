@@ -21,7 +21,7 @@ const sessionService = {
       return newToken;
     } catch (error) {
       console.error('Failed to refresh token:', error);
-      return null; // Return null if refreshing the token fails
+      return null;
     }
   },
 
@@ -39,7 +39,7 @@ const sessionService = {
       return response.data.valid;
     } catch (error) {
       console.error('Session validation failed:', error);
-      return false; // Return false if validation fails
+      return false;
     }
   },
 };

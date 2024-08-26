@@ -1,6 +1,5 @@
 import { Redirect } from "expo-router";
 import { useContext } from "react";
-import HomeScreen from "./(tabs)/home";
 import { AuthContext } from "../context/AuthContext";
 
 export default function RootLayout() {

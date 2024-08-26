@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {navigation} from 'expo-router';
 
 // Define your API endpoint base URL
 const API_BASE_URL = 'http://localhost:8000';
@@ -44,6 +45,7 @@ const authService = {
     } catch (error) {
       throw new Error('Logout failed: ' + error.message);
     }
+    navigation.reset('/login');
   },
 
   getUserData: async (token) => {

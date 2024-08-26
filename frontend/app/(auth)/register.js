@@ -54,40 +54,40 @@ const Register = () => {
             <AntDesign name="left" size={24} color="black" />
         </Pressable>
         <View style={styles.inputContainter}>
-      <Text style={styles.label}>Username</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter username"
-        value={username}
-        onChangeText={setUsername}
-      />
+          <Text style={styles.label}>Username</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter username"
+            value={username}
+            onChangeText={setUsername}
+          />
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
 
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-        <View style = {isEnabled ? styles.registerButtonEnabled : styles.registerButtonError}>
-        <Pressable 
-            onPress={handleRegister}
-            disabled={!isEnabled}
-            style = {(pressedData) => pressedData.pressed && styles.pressed}
-        >
-            <Text style = {isEnabled ? styles.registerTextEnabled : styles.registerTextError }>Register</Text>
-        </Pressable>
-        </View>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+            <View style = {isEnabled ? styles.registerButtonEnabled : styles.registerButtonError}>
+              <Pressable 
+                onPress={handleRegister}
+                disabled={!isEnabled}
+                style = {(pressedData) => pressedData.pressed && styles.pressed}
+            >
+                <Text style = {isEnabled ? styles.registerTextEnabled : styles.registerTextError }>Register</Text>
+              </Pressable>
+            </View>
         </View>
     </SafeAreaView>
   );
@@ -139,15 +139,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
+    textAlign: 'center',
   },
   registerTextError: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#FFFFFF',
+    textAlign: 'center',
   },
-    pressed: {
-        opacity: 0.5,
-    },
+  pressed: {
+    opacity: 0.5,
+  },
 });
 
 export default Register;

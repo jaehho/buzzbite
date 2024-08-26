@@ -3,6 +3,7 @@ import { StyleSheet, View, FlatList} from 'react-native';
 import { useContext, useCallback, useState, useRef, useEffect } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthContext } from '../../context/AuthContext';
 
 
 const samplePosts = [
@@ -53,8 +54,11 @@ export default function HomeScreen() {
   const [activePostId, setActivePostId] = useState(-1);
   const [posts, setPosts] = useState([]);
   
+  const { user } = useContext(AuthContext);
+  const username = user;
+
   const fetchPosts = async () => {
-    const username = "testuser";
+    
     try 
       {
         const response = await
@@ -64,10 +68,9 @@ export default function HomeScreen() {
             'Content-Type': 'application/json',
           },
         });
-        console.log(response);
         const json = await response.json();
-        console.log("posts fetched from api");
         // console.log(json);
+        console.log(response.status);
         if(json.length === 0) {
           throw new Error("no posts recieved");
         }
@@ -76,6 +79,7 @@ export default function HomeScreen() {
     } 
     catch (error) { 
       console.log("posts fetched from sample posts; error", error);
+      
       setPosts(currentPosts => [...currentPosts, ...samplePosts]);
       return;
     }

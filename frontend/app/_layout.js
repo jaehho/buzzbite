@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import AnimatedSplash from "../components/AnimatedSplash";
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider, AuthContext } from "../context/AuthContext";
+import { SessionProvider } from '../context/SessionProvider';
 
 
 
@@ -27,6 +28,7 @@ if(!appReady) {
 }
   return (
     <AuthProvider>
+      <SessionProvider>
       <Stack screenOptions={{
 
         // Hide the header for all other routes.
@@ -34,6 +36,7 @@ if(!appReady) {
       }}>
       
       </Stack>
+      </SessionProvider>
     </AuthProvider>
 
   );

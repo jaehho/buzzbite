@@ -23,7 +23,7 @@ export const SessionProvider = ({ children }) => {
     };
 
     manageSession();
-  }, [user]);
+  }, []);
 
   const refreshSession = async () => {
     const newToken = await sessionService.refreshToken();
