@@ -1,15 +1,16 @@
-from rest_framework import viewsets
+from rest_framework import permissions, viewsets, generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from .models import CustomUser
+from content.models import WatchHistory
 from .serializers import UserSerializer
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    
 
 class CustomAuthToken(ObtainAuthToken):
 
