@@ -8,5 +8,4 @@ router.register(r'watch-history', views.WatchHistoryViewSet, basename='watch-his
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('videos/<int:video_id>/viewers/', views.VideoWatchedUsersView.as_view(), name='watched-users'),
 ]

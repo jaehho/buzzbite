@@ -1,14 +1,13 @@
-from rest_framework import permissions, viewsets, generics
+from rest_framework import permissions, viewsets
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 
 from .models import Video, WatchHistory
-from users.models import CustomUser
 from .permissions import IsOwnerOrReadOnly
 from .serializers import VideoSerializer, WatchHistorySerializer
-from users.serializers import UserSerializer
 
 
 class VideoViewSet(viewsets.ModelViewSet):
@@ -43,14 +42,17 @@ class WatchHistoryViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        Optionally restricts the returned watch history based on video_id.
+        Return watch history records for the authenticated user or for a specific video.
         """
         video_id = self.request.query_params.get('video_id')
         user = self.request.user
 
         if video_id:
-            # Return watch history records for the specified video
-            return WatchHistory.objects.filter(video_id=video_id)
+            video = get_object_or_404(Video, id=video_id)
+            if video.owner != user:
+                raise PermissionDenied("You do not have permission to view the watch history for this video.")
+            # Return watch history records for the specified video if the user is the owner
+            return WatchHistory.objects.filter(video=video)
         else:
             # Default: Return all watch history records for the authenticated user
             return WatchHistory.objects.filter(user=user)
@@ -62,7 +64,6 @@ class WatchHistoryViewSet(viewsets.ModelViewSet):
         video_id = request.data.get('video')
         video = get_object_or_404(Video, id=video_id)
 
-        # Create or update the watch history record
         watch_history, created = WatchHistory.objects.update_or_create(
             user=request.user,
             video=video,
@@ -73,16 +74,3 @@ class WatchHistoryViewSet(viewsets.ModelViewSet):
             return Response({"detail": "Video view has been recorded."}, status=status.HTTP_201_CREATED)
         else:
             return Response({"detail": "Video view timestamp updated."}, status=status.HTTP_200_OK)
-
-
-class VideoWatchedUsersView(generics.ListAPIView):
-    """
-    API endpoint to list all users who have watched a specific video.
-    """
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        video_id = self.kwargs['video_id']
-        user_ids = WatchHistory.objects.filter(video_id=video_id).values_list('user', flat=True)
-        return CustomUser.objects.filter(id__in=user_ids)
