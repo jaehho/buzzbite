@@ -38,7 +38,7 @@ api.interceptors.response.use(
       const newToken = await sessionService.refreshToken();
       if (newToken) {
         // Set the new token in the header and retry the original request
-        axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+        axios.defaults.headers.common['Authorization'] = `${newToken}`;
         return api(originalRequest);
       }
     }

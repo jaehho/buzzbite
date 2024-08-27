@@ -1,62 +1,84 @@
-import React, { useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
 import { router } from 'expo-router';
 import { AuthContext } from '../../context/AuthContext';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useForm, Controller } from 'react-hook-form';
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isEnabled, setIsEnabled] = useState(false);
+  const { login } = useContext(AuthContext);
 
-  const { login, user } = useContext(AuthContext);
+  const [invalidCreds, setInvalidCreds] = useState(false);
 
-  useEffect(() => {
-    if(username !== '' && password != '') {
-      setIsEnabled(true);
-    } else {
-      setIsEnabled(false);
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+    mode: 'onChange',
+  });
+
+  const onSubmit = async (data) => {
+    try{
+      const response = await login(data.username, data.password);
     }
-  }, [username, password]);
-
-  // useEffect(() => {
-  //   console.log(user);
-  //   AsyncStorage.getItem('@user_token').then((value) => { console.log(value); }); 
-  // }, [user]);
-
-  const handleLogin = async () => {
-    login(username, password);
-  }
+    catch (error) {
+      if(error.response.status === 400){
+        setInvalidCreds(true);
+      }
+    };
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
+
+      <Controller
+        control={control}
+        rules={{ required: 'Username is required' }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            autoCapitalize="none"
+          />
+        )}
+        name="username"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
+      {errors.username && <Text style={styles.errorText}>{errors.username.message}</Text>}
+
+      <Controller
+        control={control}
+        rules={{ required: 'Password is required' }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            secureTextEntry
+          />
+        )}
+        name="password"
       />
-      <Pressable onPress={() => router.navigate('/register')}>
-        <Text style = {styles.registerText}>Don't have an account? Register here</Text>
+      {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+      {invalidCreds && <Text style={styles.errorText}>Sorry, your username and password don't match.</Text>}
+      <Pressable 
+        onPress={() => router.navigate('/register')}
+        style={({ pressed }) => pressed && styles.pressed}>
+        <Text style={styles.registerText}>Don't have an account? Register here</Text>
       </Pressable>
-      <View style = {isEnabled ? styles.loginButtonEnabled : styles.loginButtonError}>
-        <Pressable 
-          onPress={() => {handleLogin()}}
-          disabled={!isEnabled}
-          style = {(pressedData) => pressedData.pressed && styles.pressed}
+
+      <View style={isValid ? styles.loginButtonEnabled : styles.loginButtonError}>
+        <Pressable
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid}
+          style={({ pressed }) => pressed && styles.pressed}
         >
-          <Text style = {isEnabled ? styles.loginTextEnabled : styles.loginTextError }>Log In</Text>
+          <Text style={isValid ? styles.loginTextEnabled : styles.loginTextError}>Log In</Text>
         </Pressable>
       </View>
     </View>
@@ -84,8 +106,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
   },
-  loginText: {
-    
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+  },
+  registerText: {
+    color: '#0095f6',
+    textAlign: 'center',
+    marginVertical: 10,
   },
   loginButtonEnabled: {
     padding: 10,

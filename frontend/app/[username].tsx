@@ -53,7 +53,10 @@ const ProfileScreen: React.FC = () => {
 
   const fetchUserData = async () => {
     try 
-    {const response = await
+    {
+      
+      const response = await
+        
         fetch(`http://localhost:8000/profile/?username=${username}`, {
         method: 'GET',
         headers: {

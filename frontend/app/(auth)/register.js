@@ -1,94 +1,121 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, Button, StyleSheet, Alert, Pressable } from 'react-native';
+import React from 'react';
+import { SafeAreaView, View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
+import { useForm, Controller } from 'react-hook-form';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [isEnabled, setIsEnabled] = useState(false);
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm({
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+    },
+    mode: 'onChange',
+  });
 
-  useEffect(() => {
-    if (username !== '' && password !== '' && email !== '') {
-      setIsEnabled(true);
-    } else {
-      setIsEnabled(false);
+  const handleRegister = async (data) => {
+    try {
+      const response = await fetch("http://localhost:8000/register/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const json = await response.json();
+      console.log(response.status);
+      console.log(json);
+
+      if (response.status === 200) {
+        Alert.alert('Registration Successful', 'You have successfully registered.');
+        router.navigate('/login');
+      } else {
+        Alert.alert('Registration Failed', json.error || 'An error occurred during registration.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while trying to register.');
+      console.error(error);
     }
-  }, [username, password, email]);
-
-  const handleRegister = async () => {
-    const apiCall = async () => {
-        try 
-        {
-            const response = await
-            fetch("http://localhost:8000/register/", {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: username, email: email, password: password}),
-            });
-            const json = await response.json();
-            console.log(response.status);
-            console.log(json);
-            return json;
-        } 
-        catch (error) { 
-            return error;
-        }}
-
-        const response = await apiCall();
-        if(response.error) {
-            console.warn(response.error);
-            return;
-        } else {
-
-        }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-        <Pressable onPress={() => router.navigate('/login')}>
-            <AntDesign name="left" size={24} color="black" />
-        </Pressable>
-        <View style={styles.inputContainter}>
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter username"
-            value={username}
-            onChangeText={setUsername}
-          />
+      <Pressable onPress={() => router.navigate('/login')}>
+        <AntDesign name="left" size={24} color="black" />
+      </Pressable>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Username</Text>
+        <Controller
+          control={control}
+          rules={{ required: 'Username is required' }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter username"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+            />
+          )}
+          name="username"
+        />
+        {errors.username && <Text style={styles.errorText}>{errors.username.message}</Text>}
 
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
+        <Text style={styles.label}>Email</Text>
+        <Controller
+          control={control}
+          rules={{
+            required: 'Email is required',
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: 'Enter a valid email address',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          )}
+          name="email"
+        />
+        {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-            <View style = {isEnabled ? styles.registerButtonEnabled : styles.registerButtonError}>
-              <Pressable 
-                onPress={handleRegister}
-                disabled={!isEnabled}
-                style = {(pressedData) => pressedData.pressed && styles.pressed}
-            >
-                <Text style = {isEnabled ? styles.registerTextEnabled : styles.registerTextError }>Register</Text>
-              </Pressable>
-            </View>
+        <Text style={styles.label}>Password</Text>
+        <Controller
+          control={control}
+          rules={{ required: 'Password is required' }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter password"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+            />
+          )}
+          name="password"
+        />
+        {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+
+        <View style={isValid ? styles.registerButtonEnabled : styles.registerButtonError}>
+          <Pressable
+            onPress={handleSubmit(handleRegister)}
+            disabled={!isValid}
+            style={({ pressed }) => pressed && styles.pressed}
+          >
+            <Text style={isValid ? styles.registerTextEnabled : styles.registerTextError}>Register</Text>
+          </Pressable>
         </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -97,17 +124,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  inputContainter: {
-    flex:1,
+  inputContainer: {
+    flex: 1,
     justifyContent: 'center',
     padding: 20,
-  },
-  backArrow: {
-    position: 'absolute',
-    // top: '100',
-    // left: '100',
-    padding: 20,
-
   },
   label: {
     fontSize: 16,
@@ -120,6 +140,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 10,
     borderRadius: 4,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
   registerButtonEnabled: {
     padding: 10,

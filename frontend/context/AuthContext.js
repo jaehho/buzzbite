@@ -26,10 +26,16 @@ export const AuthProvider = ({ children }) => {
   // }, []);
 
   const login = async (username, password) => {
-    const loginData = await authService.login(username, password);
-    await setItem(loginData.token);
-    setUser(loginData.user);
-    router.navigate('/home');
+    try{
+      const loginData = await authService.login(username, password);
+      await setItem(loginData.token);
+      setUser(loginData.user);
+      router.navigate('/home'); 
+  }
+    catch (error){
+
+      throw error;
+    };
   };
 
   const logout = async () => {

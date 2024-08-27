@@ -15,7 +15,7 @@ const NavBar = () => {
             <Pressable style={styles.button} onPress={() => router.navigate('/(tabs)/selfprofile')}>
                 <Icon name="user" size={20} color="white" />
             </Pressable>
-            <Pressable style={styles.button} onPress={() => console.log('Posts button pressed')}>
+            <Pressable style={styles.button} onPress={() => router.navigate('/PostPage')}>
                 <Icon name="file-text" size={20} color="white" />
             </Pressable>
         </View>

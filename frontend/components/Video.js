@@ -61,7 +61,9 @@ export default function VideoScreen(props) {
       setIsPlaying(true);
       setShowPause(false);
       if(!hasBeenViewed) {
-        // api.post('insert api endpoint here');
+        api.post('/content/watch-history/'), {
+          id: props.post.id,
+        };
         sethasBeenViewed(true);
       }
     }
