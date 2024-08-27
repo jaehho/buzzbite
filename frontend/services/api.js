@@ -13,7 +13,8 @@ api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('@user_token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      console.log("Requesting...", JSON.stringify(config, null, 2));
+      config.headers.Authorization = `Token ${token}`;
     }
     return config;
   },
@@ -35,12 +36,12 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       // Attempt to refresh the token
-      const newToken = await sessionService.refreshToken();
-      if (newToken) {
-        // Set the new token in the header and retry the original request
-        axios.defaults.headers.common['Authorization'] = `${newToken}`;
-        return api(originalRequest);
-      }
+      // const newToken = await sessionService.refreshToken();
+      // if (newToken) {
+      //   // Set the new token in the header and retry the original request
+      //   axios.defaults.headers.common['Authorization'] = `${newToken}`;
+      //   return api(originalRequest);
+      // }
     }
 
     return Promise.reject(error);

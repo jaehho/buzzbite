@@ -18,6 +18,7 @@ const authService = {
       return {token: token, user: username};
 
     } catch (error) {
+      // console.log("authservice", error);
       throw error;
     }
   },

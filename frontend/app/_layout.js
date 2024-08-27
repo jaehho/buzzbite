@@ -28,7 +28,7 @@ if(!appReady) {
 }
   return (
     <AuthProvider>
-      <SessionProvider>
+      {/* <SessionProvider> */}
       <Stack screenOptions={{
 
         // Hide the header for all other routes.
@@ -36,7 +36,6 @@ if(!appReady) {
       }}>
       
       </Stack>
-      </SessionProvider>
     </AuthProvider>
 
   );

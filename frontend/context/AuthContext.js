@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       router.navigate('/home'); 
   }
     catch (error){
-
+      // console.log("authcontext", error);
       throw error;
     };
   };

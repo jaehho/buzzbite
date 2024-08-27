@@ -60,14 +60,7 @@ export default function HomeScreen() {
   const fetchPosts = async () => {
     try 
       {
-        // const response = await
-        // fetch(`http://localhost:8000/videos/?username=${user}`, {
-        //   method: 'GET',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        // });
-        const response = await api.get(`/content/videos/?username=${user}`);
+        const response = await api.get(`/content/videos/`);
         // const json = await response.json();
         // console.log(json);
         console.log(response.status);

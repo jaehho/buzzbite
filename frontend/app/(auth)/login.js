@@ -22,6 +22,7 @@ export default function LoginScreen() {
       const response = await login(data.username, data.password);
     }
     catch (error) {
+      console.log(error);
       if(error.response.status === 400){
         setInvalidCreds(true);
       }
