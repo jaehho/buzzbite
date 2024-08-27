@@ -1,11 +1,10 @@
 import React, {useContext, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
-import { useVideoPlayer, VideoView } from 'expo-video';
-import { router, useLocalSearchParams, useGlobalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import VideoPreview from '../../components/VideoPreview';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../services/api';
 
 interface UserProfile {
   profilePicture: string;
@@ -53,19 +52,24 @@ const ProfileScreen: React.FC = () => {
 
   const fetchUserData = async () => {
     try 
-    {console.log("username", user);
-      const response = await
-        fetch(`http://localhost:8000/profile/?username=${user}`, {
-        method: 'GET',
+    {
+      // const response = await
+      //   fetch(`http://localhost:8000/profile/?username=${user}`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   });
+
+      //   const json = await response.json();
+        
+      //   return json;
+      const response = await api.get(`/profile/?username=${user}`, {
         headers: {
           'Content-Type': 'application/json',
         },
-        });
-
-        const json = await response.json();
-        
-        return json;
-        
+      });
+      return response.data;
         
     } 
     catch (error) { 
@@ -118,7 +122,20 @@ const ProfileScreen: React.FC = () => {
             <Text style={styles.stat}>{followers} Followers</Text>
             <Text style={styles.stat}>{following} Following</Text>
           </View>
+
+
       </View>
+      
+      </View>
+      <View style={styles.editProfileButton}>
+        <Pressable
+          onPress={() => {router.navigate('/editprofile');
+          }}
+    
+          style={({ pressed }) => pressed && styles.pressed}
+        >
+          <Text style={styles.editProfileText}>Edit Profile</Text>
+        </Pressable>
       </View>
       <FlatList
         data={formatData(posts, numColumns)}
@@ -186,7 +203,24 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 10,
-  }
+  },
+  pressed: {
+    opacity: 0.5,
+  },
+  editProfileButton: {
+    padding: 10,
+    backgroundColor: '#0095f6',
+    fontWeight: 'bold',
+    marginVertical: 10,
+    marginHorizontal: 16,
+    borderRadius: 5,
+  },
+  editProfileText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+  },
 });
 
 export default ProfileScreen;

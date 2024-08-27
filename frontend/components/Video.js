@@ -65,6 +65,7 @@ export default function VideoScreen(props) {
         api.post('/content/watch-history/', {
           video: props.post.id,
         }).then((response) => {
+          // console.log("watch history response", response.data);
         }).catch((error) => {
           console.log("watch history error", error);
         });

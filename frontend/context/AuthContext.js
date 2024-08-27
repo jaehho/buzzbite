@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       const loginData = await authService.login(username, password);
       await setItem(loginData.token);
       setUser(loginData.user);
-      router.navigate('/home'); 
+      router.replace('/home'); 
   }
     catch (error){
       // console.log("authcontext", error);
