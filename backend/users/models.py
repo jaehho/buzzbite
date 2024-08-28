@@ -7,5 +7,6 @@ class Profile(models.Model):
     followers = models.PositiveIntegerField(default=0)
     following = models.PositiveIntegerField(default=0)
     bio = models.TextField(max_length=500, blank=True)
+    
     def __str__(self):
         return self.user.username
