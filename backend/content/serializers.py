@@ -4,7 +4,7 @@ from .models import Video, WatchHistory
 
 class VideoSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='owner.username', read_only=True)
-    profile_picture = serializers.URLField(source='owner.profile_picture', read_only=True)
+    profile_picture = serializers.URLField(source='owner.profile.profile_picture', read_only=True)
     
     class Meta:
         model = Video
