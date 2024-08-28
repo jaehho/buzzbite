@@ -45,19 +45,16 @@ const ProfileScreen: React.FC = () => {
   const [followers, setFollowers] = useState<number>(0);
   const [following, setFollowing] = useState<number>(0);
   const [posts, setPosts] = useState<Array<any>>([]);
+  const [username, setUsername] = useState<string>('');
 
-  const { username } = useLocalSearchParams();
-
-  
-  
+  const { user_id } = useLocalSearchParams();
 
   const fetchUserData = async () => {
     try 
     {
-      
       const response = await
         
-        fetch(`http://localhost:8000/profile/?username=${username}`, {
+        fetch(`http://localhost:8000/profile/${user_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -108,6 +105,7 @@ const ProfileScreen: React.FC = () => {
       setFollowers(data.followers);
       setFollowing(data.following);
       setPosts(data.videos);
+      setUsername(data.user.username);
     });
   }, []);
 

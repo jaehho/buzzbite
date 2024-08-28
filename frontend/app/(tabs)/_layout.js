@@ -19,7 +19,7 @@ export default function Layout() {
       }}>
       
     </Stack>
-    <Text style ={{position: 'absolute', top: 10, left: 10, fontSize: 50, color: "purple"}}>{user}</Text>
+    {/* <Text style ={{position: 'absolute', top: 10, left: 10, fontSize: 50, color: "purple"}}>{user}</Text> */}
     <NavBar/>
 
     </>

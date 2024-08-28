@@ -63,9 +63,9 @@ export default function VideoScreen(props) {
       if(!hasBeenViewed) {
         console.log('sending api view for:', props.post.id);
         api.post('/content/watch-history/', {
-          video: props.post.id,
+          video_id: props.post.id,
         }).then((response) => {
-          // console.log("watch history response", response.data);
+          console.log("watch history response", response.data);
         }).catch((error) => {
           console.log("watch history error", error);
         });
@@ -122,13 +122,13 @@ export default function VideoScreen(props) {
             <View style = {styles.footer}>
 
               <View style = {styles.leftColumn}>
-                <Text style = {styles.profile}>Profile Name</Text>
+                <Text style = {styles.profile}>{props.post.username}</Text>
                 <Text style = {styles.caption}>{props.post.caption}</Text>
               </View>
-
+            
 
               <View style = {styles.rightColumn}>
-                 <ProfilePictureIcon user = {props.post.username} imageUrl = {props.post.profile_picture}/>
+                 <ProfilePictureIcon user_id = {props.post.user_id} imageUrl = {props.post.profile_picture}/>
                  <LikeButton likes={props.post.likes}/>
                  <Pressable onPress = {startComments}>
                   <MaterialCommunityIcons name="comment-outline" size={30} color="white" />

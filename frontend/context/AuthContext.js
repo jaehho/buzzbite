@@ -8,6 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
   
   const { getItem, setItem, removeItem } = useAsyncStorage('@user_token');
 
@@ -28,8 +29,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try{
       const loginData = await authService.login(username, password);
-      await setItem(loginData.token);
       setUser(loginData.user);
+      setUserId(loginData.id);
       router.replace('/home'); 
   }
     catch (error){

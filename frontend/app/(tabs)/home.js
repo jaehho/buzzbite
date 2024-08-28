@@ -1,53 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList} from 'react-native';
-import { useContext, useCallback, useState, useRef, useEffect } from 'react';
+import { StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
+import { useContext, useCallback, useState, useRef, useEffect, } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
-
-
-const samplePosts = [
-  {
-    videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4',
-    caption: "Caption Here",
-    id: 1,
-    likes: 10
-    
-  },
-  {
-   videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/1.mp4',
-   caption: "Caption Here",
-   id: 2,
-   likes: 10
-  },
-  {
-   videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/3.mp4',
-   caption: "Caption Here",
-   id: 3,
-   likes: 10
-  },
-  {
-   videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/4.mp4',
-   caption: "Caption Here",
-   id: 4,
-   likes: 10
-  },
-  {
-   videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4',
-   caption: "Caption Here",
-   id: 5,
-   likes: 10
-  },
-  {
-   videoSource: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-   caption: "Caption Here",
-   id: 6,
-   likes: 10
-  },
-];
-
-
 
 
 export default function HomeScreen() {
@@ -60,7 +17,7 @@ export default function HomeScreen() {
   const fetchPosts = async () => {
     try 
       {
-        const response = await api.get(`/content/videos/`);
+        const response = await api.get(`/content/recommended/`);
         console.log(response.data);
         console.log(response.status);
         if(response.data.length === 0) {
@@ -70,10 +27,9 @@ export default function HomeScreen() {
 
     } 
     catch (error) { 
-      console.log("posts fetched from sample posts; error", error);
+      console.log("error fetching videos", error);
       
-      setPosts(currentPosts => [...currentPosts, ...samplePosts]);
-      return;
+      setPosts();
     }
       
   };
@@ -102,8 +58,16 @@ export default function HomeScreen() {
     fetchPosts();
   }, []);
 
+  if(!posts || posts.length === 0) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black'}}>
+        <ActivityIndicator size="large" color="white"/>
+      </View>
+    );
+  };
+
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider>  
     <View style={styles.container}>
       <StatusBar style="light" />
       <FlatList data={posts}

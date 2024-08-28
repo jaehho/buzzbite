@@ -19,20 +19,6 @@ interface UserProfile {
   username: string;
 }
 
-const mockUserData: UserProfile = {
-  profilePicture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png',
-  followers: 1200,
-  following: 150,
-  posts: [
-    { id: '1', caption: 'Hello World!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4', likes: 10 },
-    { id: '2', caption: 'My second post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4', likes: 10  },
-    { id: '3', caption: 'Another post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4', likes: 10  },
-    { id: '4', caption: 'Yet another post!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4', likes: 10  },
-    { id: '5', caption: 'Post five!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4', likes: 10  },
-    { id: '6', caption: 'Post six!', videoSource: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4', likes: 10  },
-  ],
-  username: 'testUser',
-};
 
 
 const numColumns = 3;
@@ -47,24 +33,13 @@ const ProfileScreen: React.FC = () => {
   const [posts, setPosts] = useState<Array<any>>([]);
 
 
-  const {user} = useContext(AuthContext);
+  const {user, user_id} = useContext(AuthContext);
   
 
   const fetchUserData = async () => {
     try 
     {
-      // const response = await
-      //   fetch(`http://localhost:8000/profile/?username=${user}`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   });
-
-      //   const json = await response.json();
-        
-      //   return json;
-      const response = await api.get(`/profile/?username=${user}`, {
+      const response = await api.get(`/profile/${user_id}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -74,7 +49,6 @@ const ProfileScreen: React.FC = () => {
     } 
     catch (error) { 
         console.log("error", error);
-        return mockUserData;
     }
   };
 

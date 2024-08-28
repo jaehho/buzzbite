@@ -8,13 +8,13 @@ const authService = {
   login: async (username, password) => {
     try {
       console.log("Attempting Login:...", username, password)
-      const response = await axios.post(`http://localhost:8000/users/api-token-auth/`, {
+      const response = await axios.post(`http://localhost:8000/api-token-auth/`, {
         username, password,
       });
       console.log(response.data);
       const { token } = response.data;
       await AsyncStorage.setItem('@user_token', token);
-      return {token: token, user: username};
+      return {token: token, user: username, user_id: user_id};
 
     } catch (error) {
       throw error;

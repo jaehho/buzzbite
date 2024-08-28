@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
+import api from '../services/api';
 
 const EditProfileScreen = () => {
     const { control, handleSubmit, formState: { errors } } = useForm();
@@ -11,6 +12,7 @@ const EditProfileScreen = () => {
 
     const onSubmit = data => {
         console.log(data);
+        api.patch(`/users/{}/`, data);
         // Handle profile update logic here
         router.back(); // Navigate back after updating
     };

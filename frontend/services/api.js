@@ -5,7 +5,7 @@ import sessionService from './sessionService';
 // Create an axios instance with default configuration
 const api = axios.create({
   baseURL: 'http://localhost:8000', // Replace with your actual API base URL
-  timeout: 10000, // Set a timeout for requests
+  timeout: 1000000, // Set a timeout for requests
 });
 
 // Request interceptor to add the token to each request
@@ -13,7 +13,7 @@ api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('@user_token');
     if (token) {
-      console.log("Requesting...", JSON.stringify(config, null, 2));
+      // console.log("Requesting...", JSON.stringify(config, null, 2));
       config.headers.Authorization = `Token ${token}`;
     }
     return config;
