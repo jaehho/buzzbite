@@ -18,11 +18,15 @@ class VideoViewSet(viewsets.ModelViewSet):
     serializer_class = VideoSerializer
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly, )
+        IsOwnerOrReadOnly,
+    )
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
+        if self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            # When retrieving a single video, return all videos
+            return Video.objects.all()
+        elif user.is_authenticated:
             # Get videos that the user has not viewed
             viewed_videos = WatchHistory.objects.filter(user=user).values_list('video', flat=True)
             return Video.objects.exclude(id__in=viewed_videos)
@@ -46,7 +50,14 @@ class VideoViewSet(viewsets.ModelViewSet):
             )
         return Response(serializer.data)
 
+    def retrieve(self, request, *args, **kwargs):
+        # Retrieve a single video instance regardless of the view status
+        video = self.get_object()
+        serializer = self.get_serializer(video)
+        return Response(serializer.data)
+
     def perform_create(self, serializer):
+        # Set the owner of the video to the authenticated user
         serializer.save(owner=self.request.user)
 
 
