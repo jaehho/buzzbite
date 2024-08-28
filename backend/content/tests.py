@@ -1,14 +1,14 @@
 # tests/test_views.py
 from django.urls import reverse
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import Video
-from users.models import CustomUser
 
 class VideoTests(APITestCase):
     def setUp(self):
         # Creating a test user
-        self.user, created = CustomUser.objects.get_or_create(username='testuser')
+        self.user, created = User.objects.get_or_create(username='testuser')
         self.user.set_password('password')
         self.user.save()
         self.client.force_authenticate(user=self.user)

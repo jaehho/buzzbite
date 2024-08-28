@@ -1,27 +1,14 @@
-from rest_framework import permissions, viewsets, generics
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-
-from .models import CustomUser
-from content.models import WatchHistory
-from .serializers import UserSerializer
+from django.contrib.auth.models import User
+from rest_framework import viewsets
+from .serializers import UserSerializer, ProfileSerializer
+from .models import Profile
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
+class UsersViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class CustomAuthToken(ObtainAuthToken):
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email
-        })
+class ProfilesViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer

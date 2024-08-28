@@ -1,16 +1,19 @@
 from rest_framework import serializers
-from .models import CustomUser
+from django.contrib.auth.models import User
+
 from content.serializers import VideoSerializer
+from .models import Profile
 
   
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['url', 'username', 'email', 'is_staff']
         
 class ProfileSerializer(serializers.ModelSerializer):
-    videos = VideoSerializer(many=True, read_only=True)
+    user = UserSerializer()
+    video_ids = VideoSerializer(many=True, read_only=True, source='user.videos')
 
     class Meta:
-        model = CustomUser
-        fields = ['username', 'profile_picture', 'followers', 'following', 'videos']
+        model = Profile
+        fields = ['user', 'profile_picture', 'followers', 'following', 'bio', 'video_ids']

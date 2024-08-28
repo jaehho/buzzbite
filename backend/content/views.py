@@ -1,4 +1,4 @@
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, generics
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import status
@@ -15,22 +15,30 @@ class VideoViewSet(viewsets.ModelViewSet):
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
     """
+    queryset = Video.objects.all()
     serializer_class = VideoSerializer
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly, )
+        IsOwnerOrReadOnly,
+    )
+
+    def perform_create(self, serializer):
+        # Set the owner of the video to the authenticated user
+        serializer.save(owner=self.request.user)
+        
+
+class RecommendedVideoList(generics.ListAPIView):
+    """
+    API view that returns recommnended videos for authenticated users.
+    """
+    serializer_class = VideoSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
-            # Get videos that the user has not viewed
-            viewed_videos = WatchHistory.objects.filter(user=user).values_list('video', flat=True)
-            return Video.objects.exclude(id__in=viewed_videos)
-        else:
-            return Video.objects.all()
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        # Get videos that the user has not viewed
+        viewed_videos = WatchHistory.objects.filter(user=user).values_list('video', flat=True)
+        return Video.objects.exclude(id__in=viewed_videos)
 
 
 class WatchHistoryViewSet(viewsets.ModelViewSet):
@@ -61,7 +69,7 @@ class WatchHistoryViewSet(viewsets.ModelViewSet):
         """
         Create or update a watch history record.
         """
-        video_id = request.data.get('video')
+        video_id = request.data.get('video_id')
         video = get_object_or_404(Video, id=video_id)
 
         watch_history, created = WatchHistory.objects.update_or_create(
