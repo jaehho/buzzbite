@@ -27,7 +27,24 @@ class VideoViewSet(viewsets.ModelViewSet):
             viewed_videos = WatchHistory.objects.filter(user=user).values_list('video', flat=True)
             return Video.objects.exclude(id__in=viewed_videos)
         else:
+            # Return all videos but add a flag to indicate anonymous viewing
+            self.request._anonymous_viewing = True
             return Video.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+
+        # Check if the request is anonymous
+        if hasattr(request, '_anonymous_viewing') and request._anonymous_viewing:
+            return Response(
+                {
+                    "detail": "You are viewing videos anonymously.",
+                    "videos": serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
