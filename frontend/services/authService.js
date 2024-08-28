@@ -1,7 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {navigation} from 'expo-router';
-import api from './api';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -9,7 +8,7 @@ const authService = {
   login: async (username, password) => {
     try {
       console.log("Attempting Login:...", username, password)
-      const response = await api.post(`/users/api-token-auth/`, {
+      const response = await axios.post(`http://localhost:8000/users/api-token-auth/`, {
         username, password,
       });
       console.log(response.data);
@@ -18,7 +17,6 @@ const authService = {
       return {token: token, user: username};
 
     } catch (error) {
-      // console.log("authservice", error);
       throw error;
     }
   },

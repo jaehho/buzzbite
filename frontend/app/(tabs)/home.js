@@ -61,8 +61,7 @@ export default function HomeScreen() {
     try 
       {
         const response = await api.get(`/content/videos/`);
-        // const json = await response.json();
-        console.log(response);
+        console.log(response.data);
         console.log(response.status);
         if(response.data.length === 0) {
           throw new Error("no posts recieved");

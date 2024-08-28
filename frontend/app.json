@@ -11,6 +11,8 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    
+    
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.buzzbitebeta",
@@ -30,7 +32,14 @@
       "output": "static"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+      "expo-camera", {
+        "cameraPermission": "Allow BuzzBite to access your camera",
+        "microphonePermission": "Allow BuzzBite to access your microphone",
+        "recordAudioAndroid": true
+      }
+    ]
     ],
     "experiments": {
       "typedRoutes": true
