@@ -66,7 +66,7 @@
         }
     },
     {
-        "model": "users.customuser",
+        "model": "auth.user",
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$870000$6N69N2pI1oX2HjPuqjecW5$9iYCg9efHfng+8WhMpXsFzbLFK7A/Jru4kEbPX3fqsk=",
@@ -78,17 +78,11 @@
             "email": "jaeho2025@gmail.com",
             "is_staff": true,
             "is_active": true,
-            "date_joined": "2024-08-22T18:22:24.245Z",
-            "profile_picture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png",
-            "followers": 0,
-            "following": 0,
-            "bio": "",
-            "groups": [],
-            "user_permissions": []
+            "date_joined": "2024-08-22T18:22:24.245Z"
         }
     },
     {
-        "model": "users.customuser",
+        "model": "auth.user",
         "pk": 2,
         "fields": {
             "password": "pbkdf2_sha256$870000$MIj2EbfUQfgVkaBOQzj2xL$7KL0vlRk22/1o6eNWU85pQIuoeolr7WQABq8Uu2bGKg=",
@@ -100,17 +94,11 @@
             "email": "tylersong2008@gmail.com",
             "is_staff": true,
             "is_active": true,
-            "date_joined": "2024-08-25T19:02:57.693Z",
-            "profile_picture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png",
-            "followers": 0,
-            "following": 0,
-            "bio": "",
-            "groups": [],
-            "user_permissions": []
+            "date_joined": "2024-08-25T19:02:57.693Z"
         }
     },
     {
-        "model": "users.customuser",
+        "model": "auth.user",
         "pk": 3,
         "fields": {
             "password": "pbkdf2_sha256$870000$QLQXlY0kgM6l9fWzpugcMU$TjuMlkqjTblz2YdpD1n11TCu1ObG9i40W/chfLn7+kc=",
@@ -122,17 +110,11 @@
             "email": "testuser@gmail.com",
             "is_staff": false,
             "is_active": true,
-            "date_joined": "2024-08-22T18:19:14.450Z",
-            "profile_picture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png",
-            "followers": 0,
-            "following": 0,
-            "bio": "",
-            "groups": [],
-            "user_permissions": []
+            "date_joined": "2024-08-22T18:19:14.450Z"
         }
     },
     {
-        "model": "users.customuser",
+        "model": "auth.user",
         "pk": 4,
         "fields": {
             "password": "pbkdf2_sha256$870000$6sGQpIBAZypV6bkPQpCyYK$WNBBiEpdRTFi3jb2AZVhsG0iizsu0O3eXu2aqI/guYs=",
@@ -144,13 +126,7 @@
             "email": "testuser2@gmail.com",
             "is_staff": false,
             "is_active": true,
-            "date_joined": "2024-08-25T19:02:15.240Z",
-            "profile_picture": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png",
-            "followers": 0,
-            "following": 0,
-            "bio": "",
-            "groups": [],
-            "user_permissions": []
+            "date_joined": "2024-08-25T19:02:15.240Z"
         }
     }
 ]

@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework import generics
 from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from content.models import Video
-from users.models import CustomUser
 from .serializers import VideoSerializer, UserSerializer, ProfileSerializer
 
 
@@ -22,7 +22,7 @@ def register_user(request):
 
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
-        user = CustomUser.objects.create_user(
+        user = User.objects.create_user(
             username=serializer.validated_data['username'],
             email=serializer.validated_data['email'],
             password=serializer.validated_data['password'],
@@ -86,7 +86,7 @@ def get_public_profile(request):
     if not username:
         return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
     
-    user = get_object_or_404(CustomUser, username=username)
+    user = get_object_or_404(User, username=username)
     serializer = ProfileSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
