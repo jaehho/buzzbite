@@ -20,21 +20,42 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('videoSource', models.URLField()),
                 ('caption', models.TextField(blank=True)),
-                ('likes', models.IntegerField(default=0)),
                 ('upload_date', models.DateTimeField(auto_now_add=True)),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='videos', to=settings.AUTH_USER_MODEL)),
+                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
+        ),
+        migrations.CreateModel(
+            name='Comment',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('comment', models.TextField()),
+                ('commented_at', models.DateTimeField(auto_now_add=True)),
+                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('video', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='content.video')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Like',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('liked_at', models.DateTimeField(auto_now_add=True)),
+                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('video', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='content.video')),
+            ],
+            options={
+                'unique_together': {('owner', 'video')},
+            },
         ),
         migrations.CreateModel(
             name='WatchHistory',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('viewed_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('video', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='content.video')),
             ],
             options={
-                'unique_together': {('user', 'video')},
+                'unique_together': {('owner', 'video')},
             },
         ),
     ]
