@@ -6,7 +6,6 @@
             "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/1.mp4",
             "caption": "Caption Here",
-            "likes": 0,
             "upload_date": "2024-08-22T18:22:54.687Z"
         }
     },
@@ -17,7 +16,6 @@
             "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4",
             "caption": "Caption Here",
-            "likes": 10,
             "upload_date": "2024-08-23T14:51:02.314Z"
         }
     },
@@ -28,7 +26,6 @@
             "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/3.mp4",
             "caption": "Caption Here",
-            "likes": 0,
             "upload_date": "2024-08-23T14:51:02.314Z"
         }
     },
@@ -39,7 +36,6 @@
             "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/4.mp4",
             "caption": "Caption Here",
-            "likes": 0,
             "upload_date": "2024-08-23T14:51:02.314Z"
         }
     },
@@ -50,7 +46,6 @@
             "owner": 3,
             "videoSource": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4",
             "caption": "Caption Here",
-            "likes": 0,
             "upload_date": "2024-08-23T14:51:02.314Z"
         }
     },
@@ -61,7 +56,6 @@
             "owner": 3,
             "videoSource": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
             "caption": "Horizontal Video",
-            "likes": 0,
             "upload_date": "2024-08-23T14:51:02.314Z"
         }
     },
