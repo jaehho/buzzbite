@@ -54,7 +54,7 @@ const ProfileScreen: React.FC = () => {
     {
       const response = await
         
-        fetch(`http://localhost:8000/profile/${user_id}`, {
+        fetch(`http://localhost:8000/profiles/${user_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ const ProfileScreen: React.FC = () => {
       setProfilePicture(data.profile_picture);
       setFollowers(data.followers);
       setFollowing(data.following);
-      setPosts(data.videos);
+      setPosts(data.video_ids);
       setUsername(data.user.username);
     });
   }, []);

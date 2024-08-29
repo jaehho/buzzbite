@@ -1,34 +1,54 @@
-import React from 'react';
+import {useContext} from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Pressable } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../services/api';
+import { AuthContext } from '../context/AuthContext';
+
+
+const schema = yup.object().shape({
+    name: yup.string(),
+    email: yup.string().email('Invalid email address'), 
+    phone: yup.string().matches(/^[0-9]+$/, 'Must be a valid phone number'), 
+    bio: yup.string().max(250, 'Bio cannot exceed 250 characters')
+});
+
 
 const EditProfileScreen = () => {
-    const { control, handleSubmit, formState: { errors } } = useForm();
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+    });
     const router = useRouter();
 
-    const onSubmit = data => {
-        console.log(data);
-        api.patch(`/users/{}/`, data);
-        // Handle profile update logic here
-        router.back(); // Navigate back after updating
+    const { user_id} = useContext(AuthContext);
+
+    const onSubmit = async (data) => {
+        try {
+            console.log(data);
+            const response =await api.patch(`/users/profiles/${user_id}/`, data);
+            // console.log(JSON.stringify(response.data));
+            router.back(); 
+        } catch (error) {
+            console.error('Profile update failed:', error);
+        }
     };
 
+    const renderError = (error) => error && <Text style={styles.error}>{error.message}</Text>;
+
     return (
-        <SafeAreaView contentContainerStyle={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Pressable onPress={() => router.back()}>
                 <AntDesign name="left" size={24} color="black" />
             </Pressable>            
-            <View>
+            <View style={styles.form}>
                 <Text style={styles.label}>Name</Text>
                 <Controller
                     control={control}
                     name="name"
-                    defaultValue=""
-                    rules={{ required: 'Name is required' }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
                             style={styles.input}
@@ -38,20 +58,12 @@ const EditProfileScreen = () => {
                         />
                     )}
                 />
-                {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
+                {renderError(errors.name)}
 
                 <Text style={styles.label}>Email</Text>
                 <Controller
                     control={control}
                     name="email"
-                    defaultValue=""
-                    rules={{
-                        required: 'Email is required',
-                        pattern: {
-                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                            message: 'Invalid email address'
-                        }
-                    }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
                             style={styles.input}
@@ -62,20 +74,12 @@ const EditProfileScreen = () => {
                         />
                     )}
                 />
-                {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+                {renderError(errors.email)}
 
                 <Text style={styles.label}>Phone</Text>
                 <Controller
                     control={control}
                     name="phone"
-                    defaultValue=""
-                    rules={{
-                        required: 'Phone number is required',
-                        pattern: {
-                            value: /^[0-9]+$/,
-                            message: 'Must be a valid phone number'
-                        }
-                    }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
                             style={styles.input}
@@ -86,17 +90,15 @@ const EditProfileScreen = () => {
                         />
                     )}
                 />
-                {errors.phone && <Text style={styles.error}>{errors.phone.message}</Text>}
+                {renderError(errors.phone)}
 
                 <Text style={styles.label}>Bio</Text>
                 <Controller
                     control={control}
                     name="bio"
-                    defaultValue=""
-                    rules={{ maxLength: { value: 250, message: 'Bio cannot exceed 250 characters' } }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, styles.textArea]}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
@@ -105,7 +107,7 @@ const EditProfileScreen = () => {
                         />
                     )}
                 />
-                {errors.bio && <Text style={styles.error}>{errors.bio.message}</Text>}
+                {renderError(errors.bio)}
 
                 <Button title="Save Changes" onPress={handleSubmit(onSubmit)} />
             </View>
@@ -118,12 +120,14 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         backgroundColor: '#fff',
-        
+    },
+    form: {
+        flex: 1,
+        justifyContent: 'center',
     },
     label: {
         fontSize: 16,
         marginBottom: 8,
-        margin: 20,
     },
     input: {
         borderWidth: 1,
@@ -131,14 +135,8 @@ const styles = StyleSheet.create({
         padding: 8,
         marginBottom: 12,
         borderRadius: 4,
-        margin: 20,
     },
     textArea: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 8,
-        marginBottom: 12,
-        borderRadius: 4,
         textAlignVertical: 'top',
     },
     error: {

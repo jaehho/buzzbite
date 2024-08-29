@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator, Text} from 'react-native';
 import { useContext, useCallback, useState, useRef, useEffect, } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -38,7 +38,9 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    setActivePostId(posts[0]?.id);
+    if(posts) {
+      setActivePostId(posts[0]?.id);
+    }
   }, []);
 
 
@@ -59,6 +61,7 @@ export default function HomeScreen() {
   if(!posts || posts.length === 0) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black'}}>
+        <Text style = {styles.errorText}>Hang on! We're working hard to retrive your videos, try again shortly!</Text>
         <ActivityIndicator size="large" color="white"/>
       </View>
     );
@@ -87,4 +90,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
+  errorText: {
+    color: 'white',
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 20,
+  }
 });

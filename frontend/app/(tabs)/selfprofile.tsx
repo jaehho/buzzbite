@@ -6,18 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 
-interface UserProfile {
-  profilePicture: string;
-  followers: number;
-  following: number;
-  posts: Array<{
-    id: string;
-    caption: string;
-    videoSource: string;
-    likes: number;
-  }>;
-  username: string;
-}
 
 
 
@@ -39,16 +27,16 @@ const ProfileScreen: React.FC = () => {
   const fetchUserData = async () => {
     try 
     {
-      const response = await api.get(`/profile/${user_id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await api.get(`users/profiles/${user_id}/`, {
+        // headers: {
+        //   'Content-Type': 'application/json',
+        // },
       });
       return response.data;
         
     } 
     catch (error) { 
-        console.log("error", error);
+        console.log("self profile error", error);
     }
   };
 
@@ -82,7 +70,7 @@ const ProfileScreen: React.FC = () => {
       setProfilePicture(data.profile_picture);
       setFollowers(data.followers);
       setFollowing(data.following);
-      setPosts(data.videos);
+      setPosts(data.video_ids);
     });
   }, []);
 

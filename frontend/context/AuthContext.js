@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null);
+  const [user_id, setUserId] = useState(null);
   
   const { getItem, setItem, removeItem } = useAsyncStorage('@user_token');
 
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     try{
       const loginData = await authService.login(username, password);
       setUser(loginData.user);
-      setUserId(loginData.id);
+      setUserId(loginData.user_id);
       router.replace('/home'); 
   }
     catch (error){
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user_id, user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
