@@ -29,6 +29,7 @@ class ProfilesViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     
+        
 class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):

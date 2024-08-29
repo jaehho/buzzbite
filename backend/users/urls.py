@@ -8,5 +8,5 @@ router.register(r'profiles', ProfilesViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('auth/', CustomAuthToken.as_view(), name='api_token_auth'),
+    path('auth/', CustomAuthToken.as_view())
 ]
