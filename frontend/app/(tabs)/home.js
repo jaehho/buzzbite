@@ -11,8 +11,6 @@ export default function HomeScreen() {
 
   const [activePostId, setActivePostId] = useState(-1);
   const [posts, setPosts] = useState([]);
-  
-  const { user } = useContext(AuthContext);
 
   const fetchPosts = async () => {
     try 

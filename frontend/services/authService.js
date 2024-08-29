@@ -8,11 +8,11 @@ const authService = {
   login: async (username, password) => {
     try {
       console.log("Attempting Login:...", username, password)
-      const response = await axios.post(`http://localhost:8000/api-token-auth/`, {
+      const response = await axios.post(`http://localhost:8000/users/auth/`, {
         username, password,
       });
       console.log(response.data);
-      const { token } = response.data;
+      const { token, user_id } = response.data;
       await AsyncStorage.setItem('@user_token', token);
       return {token: token, user: username, user_id: user_id};
 
