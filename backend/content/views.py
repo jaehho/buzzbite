@@ -17,10 +17,7 @@ class VideoViewSet(viewsets.ModelViewSet):
     """
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
-    permission_classes = (
-        # permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly,
-    )
+    permission_classes = [IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         # Set the owner of the video to the authenticated user
@@ -73,7 +70,7 @@ class WatchHistoryViewSet(viewsets.ModelViewSet): # TODO: Refactor with ListCrea
         video = get_object_or_404(Video, id=video_id)
 
         watch_history, created = WatchHistory.objects.update_or_create(
-            user=request.user,
+            owner=request.user,
             video=video,
             defaults={'viewed_at': timezone.now()}
         )
@@ -98,7 +95,7 @@ class LikeViewSet(viewsets.ModelViewSet):
         video = get_object_or_404(Video, id=video_id)
 
         # Check if the like already exists, if not create it
-        like, created = Like.objects.get_or_create(user=user, video=video)
+        like, created = Like.objects.get_or_create(owner=user, video=video)
 
         if created:
             return Response({"detail": "Video has been liked."}, status=status.HTTP_201_CREATED)
@@ -109,7 +106,7 @@ class LikeViewSet(viewsets.ModelViewSet):
         user = request.user
         video_id = kwargs['pk']
         try:
-            like = Like.objects.get(user=user, video_id=video_id)
+            like = Like.objects.get(owner=user, video_id=video_id)
             like.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Like.DoesNotExist:
@@ -124,13 +121,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         video_id = request.data.get('video_id')
         video = get_object_or_404(Video, id=video_id)
-        comment = Comment(user=request.user, video=video, comment=request.data.get('comment'))
+        comment = Comment(owner=request.user, video=video, comment=request.data.get('comment'))
         comment.save()
         return Response(status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
         comment_id = kwargs['pk']
-        comment = Comment.objects.filter(id=comment_id, user=request.user).first()
+        comment = Comment.objects.filter(id=comment_id, owner=request.user).first()
         if comment:
             comment.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
