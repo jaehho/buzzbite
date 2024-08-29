@@ -1,13 +1,22 @@
 from rest_framework import serializers
-from .models import Video, WatchHistory, Likes, Comments
+from .models import Video, WatchHistory, Like, Comment
 
-class CommentSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
-    profile_picture = serializers.URLField(source='user.profile.profile_picture', read_only=True)
+
+class LikeSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
     
     class Meta:
-        model = Comments
-        fields = ['id', 'username', 'profile_picture', 'comment', 'commented_at']
+        model = Like
+        fields = ['id', 'user_id', 'video', 'liked_at']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+    
+    class Meta:
+        model = Comment
+        fields = ['id', 'user_id', 'video', 'comment', 'commented_at']
+
 
 class VideoSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='owner.username', read_only=True)
@@ -21,7 +30,8 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'user_id', 'profile_picture', 'videoSource', 'caption', 'likes', 'comments']
 
     def get_likes(self, obj):
-        return Likes.objects.filter(video=obj).count()
+        return Like.objects.filter(video=obj).count()
+
 
 class WatchHistorySerializer(serializers.ModelSerializer):
     class Meta:

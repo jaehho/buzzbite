@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    video_ids = VideoSerializer(many=True, read_only=True, source='user.videos')
+    video_ids = VideoSerializer(many=True, read_only=True, source='user.video_set')
 
     class Meta:
         model = Profile
