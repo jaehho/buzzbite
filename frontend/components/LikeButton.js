@@ -3,7 +3,6 @@ import Animated, {
   useSharedValue,
   withSpring,
   useAnimatedStyle,
-  Extrapolate,
   interpolate,
   Extrapolation,
 } from "react-native-reanimated";
@@ -11,7 +10,6 @@ import { useState } from 'react';
 import { Pressable, View, Button, StyleSheet, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import api from '../services/api';
-
 
 
 const LikeButton = (props) => {
@@ -45,7 +43,7 @@ const LikeButton = (props) => {
     liked.value = withSpring(liked.value ? 0 : 1);
     setIsLiked(!isLiked);
     setTimeout(() => { setIsDisabled(false); }, 500);
-    const response = await api.post(`/content/likes/`, {video_id: props.video_id});
+    const response = !isLiked ? await api.post(`/content/likes/`, {video_id: props.video_id}) : await api.delete(`/content/likes/`, {video_id: props.video_id});
     console.log(JSON.stringify(response.data));
   };
 

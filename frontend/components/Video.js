@@ -1,66 +1,49 @@
-import { useVideoPlayer, VideoView } from 'expo-video';
+import { Video } from 'expo-av';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Pressable, Text, useWindowDimensions, Image } from 'react-native';
+import { StyleSheet, View, Pressable, Text, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { LinearGradient } from  'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 import LikeButton from './LikeButton';
 import CommentModal from './CommentModal';
 import ProfilePictureIcon from './ProfilePictureIcon';
-import { GestureDetector } from 'react-native-gesture-handler';
-import api from '../services/api'
+import api from '../services/api';
 
 export default function VideoScreen(props) {
 
-  //video source for the post
   const videoSource = props.post.videoSource;
-  const ref = useRef(null);
+  const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPause, setShowPause] = useState(false);
-  const [commentsVisable, setCommentsVisable] = useState(false);
-  const [hasBeenViewed, sethasBeenViewed] = useState(false);
-
+  const [commentsVisible, setCommentsVisible] = useState(false);
+  const [hasBeenViewed, setHasBeenViewed] = useState(false);
   const [comments, setComments] = useState([]);
 
+  const { height } = useWindowDimensions();
 
-  const {height} = useWindowDimensions();
-
-  //video player required for expo video
-  const player = useVideoPlayer(videoSource, player => {
-    player.loop = true;
-    player.play(); 
-  });
-  const [status, useStatus] = useState(player.status);
-
-  const playPause = () => {
+  const playPause = async () => {
     if (isPlaying) {
-      player.pause();
+      await videoRef.current.pauseAsync();
       setIsPlaying(false);
       setShowPause(true);
-      } else {
-      player.play();
+    } else {
+      await videoRef.current.playAsync();
       setIsPlaying(true);
       setShowPause(false);
-      }
     }
+  };
 
-
-  
-    //used to autoplay current video
   useEffect(() => {
-    if(props.activePostId !== props.post.id) {
-      player.replay();
-      player.pause();
+    if (props.activePostId !== props.post.id) {
+      videoRef.current.stopAsync();
       setIsPlaying(false);
       setShowPause(false);
-      
-    }
-    if(props.activePostId === props.post.id) {
-      player.play();
+    } else if (props.activePostId === props.post.id) {
+      videoRef.current.playAsync();
       setIsPlaying(true);
       setShowPause(false);
-      if(!hasBeenViewed) {
+      if (!hasBeenViewed) {
         console.log('sending api view for:', props.post.id);
         api.post('/content/watch-history/', {
           video_id: props.post.id,
@@ -69,82 +52,76 @@ export default function VideoScreen(props) {
         }).catch((error) => {
           console.log("watch history error", error);
         });
-        sethasBeenViewed(true);
-        
+        setHasBeenViewed(true);
       }
     }
   }, [props.activePostId]);
 
-
   useEffect(() => {
-    const subscription = player.addListener('playingChange', isPlaying => {
-      setIsPlaying(isPlaying);
+    const subscription = videoRef.current?.setOnPlaybackStatusUpdate(status => {
+      setIsPlaying(status.isPlaying);
     });
 
     return () => {
-      subscription.remove();
+      if (subscription) {
+        subscription();
+      }
     };
-  }, [player]);
+  }, []);
 
   const startComments = () => {
-    setCommentsVisable(true);
-  }
+    setCommentsVisible(true);
+  };
 
   const endComments = () => {
-    setCommentsVisable(false);
-  }
+    setCommentsVisible(false);
+  };
 
   return (
-    <View style={[styles.container, {height: height-60}]}>
-        <VideoView
-                ref={ref}
-                style={styles.videoStyle}
-                player={player}
-                allowsFullscreen = {false}
-                allowsPictureInPicture = {false}
-                nativeControls = {false}
-                contentFit = 'contain'
-            />
-        <Pressable onPress={playPause} 
-          style = {styles.content}>
-          <LinearGradient
-            colors = {['transparent', 'rgba(0,0,0,0.8)']}
-            style = {{  
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              top: '50%',
-              height: '100%',
-            }}
+    <View style={[styles.container, { height: height - 60 }]}>
+      <Video
+        ref={videoRef}
+        source={{ uri: videoSource }}
+        style={styles.videoStyle}
+        resizeMode="contain"
+        isLooping
+        onPlaybackStatusUpdate={(status) => setIsPlaying(status.isPlaying)}
+      />
+      <Pressable onPress={playPause} style={styles.content}>
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.8)']}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: '50%',
+            height: '100%',
+          }}
+        />
+        {showPause && <Ionicons name="play" size={40} color="rgba(255, 255, 255, 0.6)" style={{ position: 'absolute', alignSelf: 'center', top: '50%' }} />}
+        <SafeAreaView style={{ flex: 1, padding: 10 }}>
+          <View style={styles.footer}>
+            <View style={styles.leftColumn}>
+              <Text style={styles.profile}>{props.post.username}</Text>
+              <Text style={styles.caption}>{props.post.caption}</Text>
+            </View>
+            <View style={styles.rightColumn}>
+              <ProfilePictureIcon user_id={props.post.user_id} imageUrl={props.post.profile_picture} />
+              <LikeButton likes={props.post.likes} video_id={props.post.id} />
+              <Pressable onPress={startComments}>
+                <MaterialCommunityIcons name="comment-outline" size={30} color="white" />
+              </Pressable>
+            </View>
+          </View>
+          <CommentModal
+            visible={commentsVisible}
+            onClose={endComments}
+            comments={comments}
+            onAddComment={(comment) => setComments([...comments, comment])}
           />
-          {showPause && <Ionicons name="play" size={40} color="rgba(255, 255, 255, 0.6)" style = {{position: 'absolute', alignSelf: 'center', top: '50%'}}/>}
-          <SafeAreaView style = {{flex: 1, padding: 10}}>
-            <View style = {styles.footer}>
-
-              <View style = {styles.leftColumn}>
-                <Text style = {styles.profile}>{props.post.username}</Text>
-                <Text style = {styles.caption}>{props.post.caption}</Text>
-              </View>
-            
-
-              <View style = {styles.rightColumn}>
-                 <ProfilePictureIcon user_id = {props.post.user_id} imageUrl = {props.post.profile_picture}/>
-                 <LikeButton likes={props.post.likes} video_id={props.post.id}/>
-                 <Pressable onPress = {startComments}>
-                  <MaterialCommunityIcons name="comment-outline" size={30} color="white" />
-                 </Pressable>
-              </View >
-            </View> 
-            <CommentModal 
-              visible = {commentsVisable}
-              onClose = {endComments}
-              comments = {comments}
-              onAddComment = {(comment) => setComments([...comments, comment])}
-              />
-            </SafeAreaView> 
-        </Pressable>
-      </View>
-
+        </SafeAreaView>
+      </Pressable>
+    </View>
   );
 }
 
@@ -157,7 +134,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    right: 0
+    right: 0,
   },
   content: {
     flex: 1,
@@ -168,9 +145,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 0,
     paddingBottom: 20,
-    flexDirection: 'row', 
-    alignItems: 'flex-end', 
-
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   rightColumn: {
     gap: 10,
@@ -178,7 +154,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   leftColumn: {
-    flex:1
+    flex: 1,
   },
   caption: {
     color: 'white',
@@ -192,7 +168,5 @@ const styles = StyleSheet.create({
   iconFont: {
     color: 'white',
     fontSize: 10,
-
   },
-
 });
