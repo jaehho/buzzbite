@@ -129,7 +129,7 @@ export default function VideoScreen(props) {
 
               <View style = {styles.rightColumn}>
                  <ProfilePictureIcon user_id = {props.post.user_id} imageUrl = {props.post.profile_picture}/>
-                 <LikeButton likes={props.post.likes}/>
+                 <LikeButton likes={props.post.likes} video_id={props.post.id}/>
                  <Pressable onPress = {startComments}>
                   <MaterialCommunityIcons name="comment-outline" size={30} color="white" />
                  </Pressable>

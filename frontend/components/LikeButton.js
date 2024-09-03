@@ -10,7 +10,7 @@ import Animated, {
 import { useState } from 'react';
 import { Pressable, View, Button, StyleSheet, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import {RadialGradient} from "react-native-gradients";
+import api from '../services/api';
 
 
 
@@ -40,11 +40,13 @@ const LikeButton = (props) => {
     };
   });
 
-  const onLikedPress = () => {
+  const onLikedPress = async () => {
     setIsDisabled(true);
     liked.value = withSpring(liked.value ? 0 : 1);
     setIsLiked(!isLiked);
     setTimeout(() => { setIsDisabled(false); }, 500);
+    const response = await api.post(`/content/likes/`, {video_id: props.video_id});
+    console.log(JSON.stringify(response.data));
   };
 
   return (

@@ -34,7 +34,7 @@ class RecommendedVideoList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         # Get videos that the user has not viewed
-        viewed_videos = WatchHistory.objects.filter(user=user).values_list('video', flat=True)
+        viewed_videos = WatchHistory.objects.filter(owner=user).values_list('video', flat=True)
         return Video.objects.exclude(id__in=viewed_videos)
 
 
