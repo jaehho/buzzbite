@@ -34,6 +34,9 @@ backend:
 	- @docker-compose exec -it backend bash
 	@docker-compose down
 
+watch_backend:
+	@docker-compose logs -f backend
+
 resetdb:
 	@docker-compose up -d --scale frontend=0
 	@docker-compose exec backend python manage.py resetdb
