@@ -9,6 +9,7 @@ import LikeButton from './LikeButton';
 import CommentModal from './CommentModal';
 import ProfilePictureIcon from './ProfilePictureIcon';
 import api from '../services/api';
+import RestaurantOverlay from './RestaurantOverlay';
 
 export default function VideoScreen(props) {
 
@@ -77,13 +78,14 @@ export default function VideoScreen(props) {
     setCommentsVisible(false);
   };
 
+
   return (
     <View style={[styles.container, { height: height - 60 }]}>
       <Video
         ref={videoRef}
         source={{ uri: videoSource }}
         style={styles.videoStyle}
-        resizeMode="contain"
+        resizeMode = "cover"
         isLooping
         onPlaybackStatusUpdate={(status) => setIsPlaying(status.isPlaying)}
       />
@@ -102,6 +104,7 @@ export default function VideoScreen(props) {
         <SafeAreaView style={{ flex: 1, padding: 10 }}>
           <View style={styles.footer}>
             <View style={styles.leftColumn}>
+              <RestaurantOverlay restaurant = {{restaurantName: 'Wing Stop', foodItem: 'Wings', image: 'https://banner2.cleanpng.com/20180621/uxq/aaz03p269.webp'}} />
               <Text style={styles.profile}>{props.post.username}</Text>
               <Text style={styles.caption}>{props.post.caption}</Text>
             </View>

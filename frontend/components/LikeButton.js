@@ -7,7 +7,7 @@ import Animated, {
   Extrapolation,
 } from "react-native-reanimated";
 import { useState } from 'react';
-import { Pressable, View, Button, StyleSheet, Text } from "react-native";
+import { Pressable, View, StyleSheet, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import api from '../services/api';
 

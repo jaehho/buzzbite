@@ -1,6 +1,5 @@
 import { Link, router } from 'expo-router';
-import React from 'react';
-import { View, Pressable, StyleSheet, PixelRatio } from 'react-native';
+import { View, Pressable, StyleSheet, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { AuthContext } from '../context/AuthContext';
