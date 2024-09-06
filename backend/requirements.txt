@@ -2,3 +2,5 @@ django
 psycopg2-binary
 django-environ
 djangorestframework
+django-storages[s3]
+Pillow # for image upload
