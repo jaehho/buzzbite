@@ -15,7 +15,7 @@ api.interceptors.request.use(
     if (token) {
 
       config.headers.Authorization = `Token ${token}`;
-      console.log("Requesting...", JSON.stringify(config, null, 2));
+      // console.log("Requesting...", JSON.stringify(config, null, 2));
     }
     return config;
   },

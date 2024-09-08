@@ -4,7 +4,7 @@ import { useContext, useCallback, useState, useRef, useEffect, } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import api from '../../services/api';
-import axios from 'axios';
+
 
 
 export default function HomeScreen() {
@@ -16,7 +16,7 @@ export default function HomeScreen() {
     try 
       {
         const response = await api.get(`/content/videos/`);
-        console.log(response.data);
+        // console.log(response.data);
         console.log(response.status);
         if(response.data.length === 0) {
           throw new Error("no posts recieved");
