@@ -84,8 +84,6 @@ export default function PostPage() {
         console.log(error);
       }
       
-
-      
     }
   }
 

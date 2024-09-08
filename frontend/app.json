@@ -1,5 +1,6 @@
 {
   "expo": {
+
     "name": "buzzbitebeta",
     "slug": "buzzbitebeta",
     "version": "1.0.0",
@@ -11,7 +12,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    
+    "plugins": [
+      [
+      "expo-camera", {
+        "cameraPermission": "Allow BuzzBite to access your camera",
+        "microphonePermission": "Allow BuzzBite to access your microphone",
+        "recordAudioAndroid": true
+      }
+      ],
+      "expo-router"
+    ],
     
     "ios": {
       "supportsTablet": true,
@@ -31,16 +41,6 @@
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": [
-      "expo-router",
-      [
-      "expo-camera", {
-        "cameraPermission": "Allow BuzzBite to access your camera",
-        "microphonePermission": "Allow BuzzBite to access your microphone",
-        "recordAudioAndroid": true
-      }
-    ]
-    ],
     "experiments": {
       "typedRoutes": true
     },
