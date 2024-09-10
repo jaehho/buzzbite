@@ -61,17 +61,19 @@ export default function VideoScreen(props) {
       videoRef.current.playAsync();
       setIsPlaying(true);
       setShowPause(false);
+      
       if (!hasBeenViewed) {
-        console.log('sending api view for:', props.post.id);
+        // console.log('sending api view for:', props.post.id);
         api.post('/content/watch-history/', {
           video_id: props.post.id,
         }).then((response) => {
-          console.log("watch history response", response.data);
+          // console.log("watch history response", response.data);
         }).catch((error) => {
           console.log("watch history error", error);
         });
         setHasBeenViewed(true);
       }
+      
     }
   }, [props.activePostId]);
 

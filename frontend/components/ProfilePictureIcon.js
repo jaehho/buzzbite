@@ -1,12 +1,14 @@
 import { Pressable, Image, StyleSheet} from 'react-native';
 import { router } from 'expo-router';
 
-const ProfilePictureIcon = ({ imageUrl, user }) => {
+const ProfilePictureIcon = ({ imageUrl, user_id }) => {
 
 
     const handlePress = () => {
-        router.navigate(`/${user}`);
+        console.log('navigating to', user_id);
+        router.navigate(`/${user_id}`);
     };
+
     return (
         <Pressable onPress={handlePress} style ={styles.profileImgContainer}>
             <Image source={{ uri: imageUrl }} style={styles.image} resizeMode="cover"/>

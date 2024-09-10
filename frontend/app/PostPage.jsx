@@ -87,16 +87,16 @@ export default function PostPage() {
     }
   }
 
-  // const endVideoRecording = async () => {
-  //   try {
-  //     console.log("attempting to merge")
-  //     const data = await VideoManager.merge(videoSegments);
+  const endVideoRecording = async () => {
+    try {
+      console.log("attempting to merge")
+      const data = await VideoManager.merge(videoSegments);
     
-  //     console.log("merged video path", uri);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }  
+      console.log("merged video path", uri);
+    } catch (error) {
+      console.log(error);
+    }
+  }  
 
 
   if (photo) {

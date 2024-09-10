@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, FlatList, ActivityIndicator, Text} from 'react-native';
-import { useContext, useCallback, useState, useRef, useEffect, } from 'react';
+import { useCallback, useState, useRef, useEffect, } from 'react';
 import VideoScreen from '../../components/Video';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import api from '../../services/api';

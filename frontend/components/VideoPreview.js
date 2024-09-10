@@ -11,7 +11,7 @@ const VideoPreview = (props) => {
     });
 
     return (
-        <View style={{flex:1}}>
+        <View style={{flex:1, backgroundColor: '#D3D3D3'}}>
             <VideoView 
                 player={player}
                 style ={{height: '100%', width: itemWidth-1}}
