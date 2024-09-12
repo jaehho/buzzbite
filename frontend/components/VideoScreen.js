@@ -107,7 +107,7 @@ export default function VideoScreen(props) {
         isLooping
         onPlaybackStatusUpdate={status => setStatus(() => status)}
         onError = {error => console.log("video error", error)}
-
+        shouldPlay={props.shouldPlay}
         onLoadStart={() => {
           potentiallyReloadVideo();
         }}

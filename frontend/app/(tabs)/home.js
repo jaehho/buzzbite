@@ -4,13 +4,14 @@ import { useCallback, useState, useRef, useEffect, } from 'react';
 import VideoScreen from '../../components/VideoScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import api from '../../services/api';
-
+import { useFocusEffect } from 'expo-router';
 
 
 export default function HomeScreen() {
 
   const [activePostId, setActivePostId] = useState(-1);
   const [posts, setPosts] = useState([]);
+  const [shouldPlay, setShouldPlay] = useState(true);
 
   const { height } = useWindowDimensions();
 
@@ -45,6 +46,17 @@ export default function HomeScreen() {
     }
   }, []);
 
+  useFocusEffect(
+
+    useCallback(() => {
+      setShouldPlay(true);
+      return () => {
+        setShouldPlay(false);
+      }
+    }
+    , [])
+  );
+
 
   const viewabilityConfigCallbackPairs= useRef([{
     viewabilityConfig: {itemVisiblePercentThreshold:99}, 
@@ -74,7 +86,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <FlatList data={posts}
-                renderItem={({item}) => <VideoScreen post={item} activePostId ={activePostId} hasNavBar ={true}/>}
+                renderItem={({item}) => <VideoScreen post={item} activePostId ={activePostId} hasNavBar ={true} shouldPlay={shouldPlay}/>}
                 keyExtractor={( {id}, index )=> index.toString()}
                 pagingEnabled
                 viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
