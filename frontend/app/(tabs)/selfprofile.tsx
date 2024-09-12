@@ -7,6 +7,6 @@ export default function SelfProfile() {
   const { user_id} = useContext(AuthContext);
 
   return (
-    <ProfileScreen user_id ={user_id}/>
+    <ProfileScreen user_id ={user_id} isSelf={true}/>
   );
 }

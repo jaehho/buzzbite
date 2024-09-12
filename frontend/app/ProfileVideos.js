@@ -1,43 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList, ActivityIndicator, Text, useWindowDimensions} from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator, Text, useWindowDimensions, Pressable} from 'react-native';
 import { useCallback, useState, useRef, useEffect, } from 'react';
-import VideoScreen from '../../components/VideoScreen';
+import VideoScreen from '../components/VideoScreen';
+import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import api from '../../services/api';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { LinearGradient } from 'expo-linear-gradient';
+import {router} from 'expo-router';
 
 
 
-export default function HomeScreen() {
+export default function ProfileVideos() {
 
   const [activePostId, setActivePostId] = useState(-1);
-  const [posts, setPosts] = useState([]);
+  const { index, posts } = useLocalSearchParams();
 
   const { height } = useWindowDimensions();
-
-  const fetchPosts = async () => {
-    try 
-      {
-        const response = await api.get(`/content/videos/`);
-        // console.log(response.data);
-        console.log(response.status);
-        if(response.data.length === 0) {
-          throw new Error("no posts recieved");
-        }
-        setPosts(currentPosts => [...currentPosts, ...response.data]);
-
-    } 
-    catch (error) { 
-      console.log("error fetching videos", error);
-      
-      setPosts();
-    }
-      
-  };
-
-  //fetch posts on load
-  useEffect(() => {
-    fetchPosts();
-  }, []);
 
   useEffect(() => {
     if(posts) {
@@ -56,8 +34,9 @@ export default function HomeScreen() {
   }
   ]);
 
+// do nothing for now
   const onEndReached = useCallback(() => {
-    fetchPosts();
+
   }, []);
 
   if(!posts || posts.length === 0) {
@@ -72,19 +51,35 @@ export default function HomeScreen() {
   return (
     <SafeAreaProvider>  
     <View style={styles.container}>
+
       <StatusBar style="light" />
-      <FlatList data={posts}
-                renderItem={({item}) => <VideoScreen post={item} activePostId ={activePostId} hasNavBar ={true}/>}
+      <FlatList data={JSON.parse(posts)}
+                renderItem={({item}) => <VideoScreen post={item} activePostId ={activePostId} hasNavBar={false}/>}
                 keyExtractor={( {id}, index )=> index.toString()}
                 pagingEnabled
                 viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-                onEndReached={onEndReached}
+                onEndReached={()=>{}}
                 onEndReachedThreshold={1}
                 getItemLayout={(data, index) => (
-                  { length: height-60, offset: (height-60) * index, index }
+                  { length: height, offset: height * index, index }
                 )}
+                initialScrollIndex= {index}
 
       />
+
+        <LinearGradient
+          colors={['rgba(0,0,0,0.5)', 'transparent']}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            height: '10%',
+          }}
+        />
+        <Pressable onPress={() => router.back()} style = {styles.backButton}>
+            <AntDesign name="left" size={24} color="white" />
+        </Pressable>
     </View>
     </SafeAreaProvider>
   );
@@ -100,5 +95,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 20,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 10,
   }
 });

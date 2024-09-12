@@ -1,4 +1,4 @@
-import {View, Pressable, StyleSheet, Dimensions} from 'react-native';
+import {View, Pressable, Dimensions} from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 const screenWidth = Dimensions.get('window').width;
@@ -12,13 +12,16 @@ const VideoPreview = (props) => {
 
     return (
         <View style={{flex:1, backgroundColor: '#D3D3D3'}}>
-            <VideoView 
-                player={player}
-                style ={{height: '100%', width: itemWidth-1}}
-                contentFit = 'cover' 
-                allowsFullscreen = {false}
-                allowsPictureInPicture = {false}
-                nativeControls = {false}/>
+            <Pressable onPress={() => {props.handleVideoPress(props.index)}}>
+                <VideoView 
+                    player={player}
+                    style ={{height: '100%', width: itemWidth-1}}
+                    contentFit = 'cover' 
+                    allowsFullscreen = {false}
+                    allowsPictureInPicture = {false}
+                    nativeControls = {false}
+                />
+            </Pressable>
         </View>
     );
 }

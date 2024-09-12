@@ -1,8 +1,8 @@
-import { View, Text, Image, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
-import { router, useLocalSearchParams, useGlobalSearchParams } from 'expo-router';
+import { StyleSheet, Pressable } from 'react-native';
+import { router, useLocalSearchParams} from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import ProfileScreen from '../components/ProfileScreen';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 
 
@@ -11,7 +11,7 @@ export default function SelfProfile() {
   return (
     <>
 
-      <ProfileScreen user_id={user_id}/>
+      <ProfileScreen user_id={user_id} isSelf={false}/>
       <Pressable onPress={() => router.back()} style = {styles.backButton}>
         <AntDesign name="left" size={24} color="black" />
       </Pressable>

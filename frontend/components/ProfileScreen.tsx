@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, Dimensions, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import VideoPreview from '../components/VideoPreview';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import api from '../services/api';
-
 
 
 
@@ -13,25 +11,30 @@ const numColumns = 3;
 const screenWidth = Dimensions.get('window').width;
 const itemWidth = screenWidth / numColumns;
 
-const ProfileScreen = ({user_id}) => {
+const ProfileScreen = (user_id: any, isSelf: boolean) => {
 
   const [profilePicture, setProfilePicture] = useState<string>('');
   const [followers, setFollowers] = useState<number>(0);
   const [following, setFollowing] = useState<number>(0);
   const [posts, setPosts] = useState<Array<any>>([]);
   const [username, setUsername] = useState<string>('');
-  
+
+  //idk how this works lol
+  const [self, setIsSelf] = useState<boolean>(user_id.isSelf);
+
+  const id = user_id.user_id;
 
   const fetchUserData = async () => {
     try 
     {
-      const response = await api.get(`users/profiles/${user_id}/`, {
+      console.log("user_id", user_id);
+      const response = await api.get(`/users/profiles/${id}/`, {
       });
       return response.data;
         
     } 
     catch (error) { 
-        console.log("self profile error", error);
+        console.log("profile error", error);
     }
   };
 
@@ -55,9 +58,16 @@ const ProfileScreen = ({user_id}) => {
     }
     return (
       <View style={styles.item}>
-        <VideoPreview post = {item}/>
+        <VideoPreview post = {item} handleVideoPress={handleVideoPress}/>
       </View>
     );
+  };
+
+  
+  const handleVideoPress = (index: any) => {
+    //@ts-ignore
+    router.push({ pathname: '/ProfileVideos', 
+      params: {index: index, posts: JSON.stringify(posts)}});
   };
 
   useEffect(() => {
@@ -66,7 +76,7 @@ const ProfileScreen = ({user_id}) => {
       setFollowers(data.followers);
       setFollowing(data.following);
       setPosts(data.video_ids);
-      setUsername(data.username);
+      setUsername(data.user.username);
     });
   }, []);
 
@@ -81,24 +91,32 @@ const ProfileScreen = ({user_id}) => {
             <Text style={styles.stat}>{following} Following</Text>
           </View>
 
-
       </View>
       
       </View>
-      <View style={styles.editProfileButton}>
-        <Pressable
-          onPress={() => {router.navigate('/editprofile');
-          }}
-    
-          style={({ pressed }) => pressed && styles.pressed}
-        >
-          <Text style={styles.editProfileText}>Edit Profile</Text>
-        </Pressable>
-      </View>
+  {self && (<View style={styles.editProfileButton}>
+      <Pressable
+        onPress={() => {router.navigate('/editprofile');
+        }}
+        style={({ pressed }) => pressed && styles.pressed}
+      >
+        <Text style={styles.editProfileText}>Edit Profile</Text>
+      </Pressable>
+    </View>)}
       <FlatList
         data={formatData(posts, numColumns)}
         style={styles.list}
-        renderItem={renderItem}
+        renderItem={({item, index}) => { if (item.empty) {
+          console.log('empty');
+          return <View style={[styles.item, styles.itemInvisible]} />;
+        }
+        return (
+          <View style={styles.item}>
+            <VideoPreview post = {item} index = {index} handleVideoPress={handleVideoPress}/>
+            
+          </View>
+        );}
+      }
         keyExtractor={(item) => item.id}
         numColumns={numColumns}
       />

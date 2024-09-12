@@ -24,6 +24,7 @@ export default function VideoScreen(props) {
   const [shouldVideoReload, setShouldVideoReload] = useState(false);
   const isVideoReadyRef = useRef(false);
   const [reloadVideo, setReloadVideo] = useState(false);
+  const [hasNavBar, setHasNavBar] = useState(props.hasNavBar);
 
   const potentiallyReloadVideo = useCallback(() => {
     setTimeout(() => {
@@ -96,7 +97,7 @@ export default function VideoScreen(props) {
 
 
   return (
-    <View style={[styles.container, { height: height - 60 }]}>
+    <View style={[styles.container, { height: hasNavBar ? height - 60 : height}]}>
       
       {!reloadVideo ? <Video
         ref={videoRef}
