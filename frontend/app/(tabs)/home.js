@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList, ActivityIndicator, Text} from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator, Text, useWindowDimensions} from 'react-native';
 import { useCallback, useState, useRef, useEffect, } from 'react';
-import VideoScreen from '../../components/Video';
+import VideoScreen from '../../components/VideoScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import api from '../../services/api';
 
@@ -11,6 +11,8 @@ export default function HomeScreen() {
 
   const [activePostId, setActivePostId] = useState(-1);
   const [posts, setPosts] = useState([]);
+
+  const { height } = useWindowDimensions();
 
   const fetchPosts = async () => {
     try 
@@ -78,9 +80,12 @@ export default function HomeScreen() {
                 viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
                 onEndReached={onEndReached}
                 onEndReachedThreshold={1}
+                getItemLayout={(data, index) => (
+                  { length: height-60, offset: (height-60) * index, index }
+                )}
+
       />
     </View>
-    
     </SafeAreaProvider>
   );
 }

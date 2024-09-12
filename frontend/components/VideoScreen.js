@@ -1,6 +1,6 @@
 import { Video } from 'expo-av';
 import { useEffect, useRef, useState, useCallback} from 'react';
-import { StyleSheet, View, Pressable, Text, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Pressable, Text, useWindowDimensions} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -23,11 +23,13 @@ export default function VideoScreen(props) {
   const [status, setStatus] = useState({});
   const [shouldVideoReload, setShouldVideoReload] = useState(false);
   const isVideoReadyRef = useRef(false);
+  const [reloadVideo, setReloadVideo] = useState(false);
 
   const potentiallyReloadVideo = useCallback(() => {
     setTimeout(() => {
-      if (!isVideoReadyRef.current) {
+      if (status.isLoaded == false) {
         setShouldVideoReload(true);
+        console.log('reloading video:', videoSource);
       }
     }, 300);
   }, []);
@@ -73,26 +75,16 @@ export default function VideoScreen(props) {
         });
         setHasBeenViewed(true);
       }
-      
+
     }
   }, [props.activePostId]);
 
-  // useEffect(() => {
-  //   console.log( videoSource, status.isLoaded, "error: ", status.error);
-
-  // }, [status.isLoaded]);
-
   useEffect(() => {
-    const subscription = videoRef.current?.setOnPlaybackStatusUpdate(status => {
-      setIsPlaying(status.isPlaying);
-    });
+    potentiallyReloadVideo();
+    // console.log( videoSource, status.isLoaded, "error: ", status.error);
 
-    return () => {
-      if (subscription) {
-        subscription();
-      }
-    };
-  }, []);
+  }, [status.isLoaded, reloadVideo]);
+
 
   const startComments = () => {
     setCommentsVisible(true);
@@ -105,7 +97,8 @@ export default function VideoScreen(props) {
 
   return (
     <View style={[styles.container, { height: height - 60 }]}>
-      {!shouldVideoReload && <Video
+      
+      {!reloadVideo ? <Video
         ref={videoRef}
         source={{ uri: videoSource }}
         style={styles.videoStyle}
@@ -113,19 +106,15 @@ export default function VideoScreen(props) {
         isLooping
         onPlaybackStatusUpdate={status => setStatus(() => status)}
         onError = {error => console.log("video error", error)}
+
         onLoadStart={() => {
           potentiallyReloadVideo();
-          if (props.onLoadStart) {
-            props.onLoadStart();
-          }
         }}
+
         onReadyForDisplay={(event) => {
           isVideoReadyRef.current = true;
-          if (props.onReadyForDisplay) {
-            props.onReadyForDisplay(event);
-          }
         }}
-      />} 
+      /> : <></>}
       <Pressable onPress={playPause} style={styles.content}>
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.8)']}
