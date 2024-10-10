@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Pressable, TextInput, Button } from 'react-native';
 import { router } from 'expo-router';
 import { AuthContext } from '../../context/AuthContext';
 import { useForm, Controller } from 'react-hook-form';
@@ -32,7 +32,7 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-
+      <Button onPress={()=> router.navigate('/PostPage')} title ={'clickhere'}></Button>
       <Controller
         control={control}
         rules={{ required: 'Username is required' }}
