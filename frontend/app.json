@@ -1,6 +1,5 @@
 {
   "expo": {
-
     "name": "buzzbitebeta",
     "slug": "buzzbitebeta",
     "version": "1.0.0",
@@ -14,15 +13,15 @@
     },
     "plugins": [
       [
-      "expo-camera", {
-        "cameraPermission": "Allow BuzzBite to access your camera",
-        "microphonePermission": "Allow BuzzBite to access your microphone",
-        "recordAudioAndroid": true
-      }
+        "expo-camera",
+        {
+          "cameraPermission": "Allow BuzzBite to access your camera",
+          "microphonePermission": "Allow BuzzBite to access your microphone",
+          "recordAudioAndroid": true
+        }
       ],
       "expo-router"
     ],
-    
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.buzzbitebeta",
@@ -35,7 +34,11 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.buzzbitebeta"
+      "package": "com.anonymous.buzzbitebeta",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -49,8 +52,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "85b9def8-66eb-4fec-9d85-2a7552a7a65f"
+        "projectId": "0ab7f8ec-b5ae-4ce5-aed5-78e1d7146395"
       }
-    }
+    },
+    "owner": "tsong28"
   }
 }
