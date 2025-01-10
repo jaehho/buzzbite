@@ -51,7 +51,7 @@ clean: ## Remove Python cache files
 	@find . -name "__pycache__" -delete
 
 chownme: ## Change ownership of files to current user
-	sudo chown -R $(shell whoami) ./
+	@sudo chown -R $(shell whoami) ./
 
 teardown: ## Stop Docker containers and clean up
 	@$(DOCKER_COMPOSE) down -t 1
