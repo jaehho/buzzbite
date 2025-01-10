@@ -121,14 +121,14 @@ class CommentViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         video_id = request.data.get('video_id')
         video = get_object_or_404(Video, id=video_id)
-        comment = Comment(owner=request.user, video=video, comment=request.data.get('comment'))
-        comment.save()
+        comment_text = Comment(owner=request.user, video=video, comment_text=request.data.get('comment_text'))
+        comment_text.save()
         return Response(status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
         comment_id = kwargs['pk']
-        comment = Comment.objects.filter(id=comment_id, owner=request.user).first()
-        if comment:
-            comment.delete()
+        comment_text = Comment.objects.filter(id=comment_id, owner=request.user).first()
+        if comment_text:
+            comment_text.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_404_NOT_FOUND)
