@@ -24,7 +24,7 @@ export const SessionProvider = ({ children }) => {
 
   //   manageSession();
   // }, []);
-
+ 
   const refreshSession = async () => {
     const newToken = await sessionService.refreshToken();
     if (newToken) {

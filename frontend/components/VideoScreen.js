@@ -19,7 +19,6 @@ export default function VideoScreen(props) {
   const [showPause, setShowPause] = useState(false);
   const [commentsVisible, setCommentsVisible] = useState(false);
   const [hasBeenViewed, setHasBeenViewed] = useState(false);
-  const [comments, setComments] = useState([]);
   const [status, setStatus] = useState({});
   const [shouldVideoReload, setShouldVideoReload] = useState(false);
   const isVideoReadyRef = useRef(false);
@@ -95,6 +94,8 @@ export default function VideoScreen(props) {
     setCommentsVisible(false);
   };
 
+  
+
 
   return (
     <View style={[styles.container, { height: hasNavBar ? height - 60 : height}]}>
@@ -146,8 +147,7 @@ export default function VideoScreen(props) {
           <CommentModal
             visible={commentsVisible}
             onClose={endComments}
-            comments={comments}
-            onAddComment={(comment) => setComments([...comments, comment])}
+            video_id={props.post.id}
           />
         </SafeAreaView>
       </Pressable>
