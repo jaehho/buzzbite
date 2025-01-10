@@ -26,5 +26,6 @@ class Like(models.Model):
 class Comment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    comment = models.TextField()
-    commented_at = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
