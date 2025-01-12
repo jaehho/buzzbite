@@ -4,3 +4,4 @@ django-environ
 djangorestframework
 django-storages[s3]
 Pillow # for image upload
+# dj-database-url # for macbook?

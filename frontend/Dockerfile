@@ -10,9 +10,6 @@ COPY package.json package-lock.json ./
 # Install the dependencies, including expo
 RUN npm install
 
-# Install eas-cli globally
-RUN npm install -g eas-cli
-
 # Copy the rest of the project files to the container
 COPY . .
 
